@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">Vendedores</string>
+    <string name="is_login_ready">isLoginReady</string>
+    <string name="email">email</string>
+    <string name="given_name">givenName</string>
+    <string name="family_name">familyName</string>
+    <string name="client_id">clientId</string>
+    <string name="picture">picture</string>
+    <string name="phone">phone</string>
+    <string name="username">userName</string>
+    <string name="token">token</string>
+    <string name="delivery">Delivery</string>
+    <string name="lavalle">\ Lavalle</string>
+    <string name="welcome_message">Bienvenido!</string>
+    <string name="welcome_message_subtitle">Inicia sesion con Google para comenzar a vender</string>
+    <string name="terms_and_conditions">Continuando, Acepto los <a href="https://www.deliverylavalle.com.ar/terminosycondiciones">Terminos y condiciones</a></string>
+    <string name="no_conection">Hay problemas de conexion con el servidor, intenta nuevamente</string>
+    <string name="company_limits">companyLimits</string>
+    <string name="app_bar_1_maps">\"Definiremos \"</string>
+    <string name="app_bar_2_maps">tu alcance de Delivery</string>
+    <string name="company_detail">Datos de tu empresa</string>
+    <string name="save_company">Guardar Compañia</string>
+    <string name="take_a_picture">Selecciona una Foto</string>
+    <string name="take_a_picture_field">Sube un logo de tu empresa</string>
+    <string name="are_you_available">¿Estás disponible para empezar a vender ahora?</string>
+    <string name="arguments_limits">arguments_limits</string>
+    <string name="required">Este Campo es Requerido</string>
+    <string name="cash">Efectivo</string>
+    <string name="mercado_pago">Mercado Pago</string>
+    <string name="retry_in_local">Entrega en el Local</string>
+    <string name="delivery_method_delivery">Entrega por Delivery</string>
+    <string name="photo_selected">Foto Seleccionada</string>
+
+</resources>
