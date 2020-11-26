@@ -17,6 +17,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.axelfernandez.deliverylavallevendedores.HomeActivity
 import com.axelfernandez.deliverylavallevendedores.R
 import com.axelfernandez.deliverylavallevendedores.models.Company
 import com.axelfernandez.deliverylavallevendedores.utils.FileUtil
@@ -93,6 +94,10 @@ class CompanyRegisterFragment : Fragment() {
             company.id = it
             LoginUtils.saveDefaultCompany(requireContext(),company)
 
+            val intent = Intent(context, HomeActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+            activity?.finish()
 
 
         })
@@ -105,6 +110,7 @@ class CompanyRegisterFragment : Fragment() {
             val selectedFilename = data?.data //The uri with the location of the file
             if (selectedFilename != null) {
                 photoSelected = File(FileUtil.getPath(selectedFilename,requireContext())?:return)
+                photoSelected = FileUtil.resizeImage(photoSelected)
                 isPhotoSelected = true
                 view.company_register_add_photo.text = getString(R.string.photo_selected)
                 view.company_image.setImageURI(selectedFilename)

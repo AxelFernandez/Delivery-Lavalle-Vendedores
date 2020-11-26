@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment.findNavController
+import com.axelfernandez.deliverylavallevendedores.HomeActivity
 import com.axelfernandez.deliverylavallevendedores.R
 import com.axelfernandez.deliverylavallevendedores.ui.splash.SplashFragmentDirections
 import com.axelfernandez.deliverylavallevendedores.utils.LoginUtils
@@ -119,7 +120,10 @@ class LoginFragment : Fragment() {
                     if (it.is_new || !it.completeRegistry) {
                         findNavController(this).navigate(LoginFragmentDirections.actionLoginFragmentToMapsFragment())
                     } else {
-                        TODO("Redirect To Home")
+                        val intent = Intent(context, HomeActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                        startActivity(intent)
+                        activity?.finish()
                     }
 
 

@@ -84,6 +84,18 @@ class LoginUtils {
             editor.clear().apply()
 
         }
+
+        fun setIsLoginReady(context: Context, status: Boolean){
+            var editor :SharedPreferences.Editor = context.getSharedPreferences("userSession", Context.MODE_PRIVATE).edit()
+            editor.putBoolean(context.getString(R.string.is_login_ready),status)
+            editor.apply()
+        }
+
+        fun getIsLoginReady(context: Context):Boolean{
+            val sharedPreferences : SharedPreferences = context.getSharedPreferences("userSession", Context.MODE_PRIVATE)
+            return sharedPreferences.getBoolean(context.getString(R.string.is_login_ready),false)
+
+        }
     }
 }
 

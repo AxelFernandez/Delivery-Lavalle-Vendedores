@@ -12,9 +12,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment.findNavController
+import com.axelfernandez.deliverylavallevendedores.HomeActivity
 import com.axelfernandez.deliverylavallevendedores.api.Api
 import com.axelfernandez.deliverylavallevendedores.api.RetrofitFactory
-import com.axelfernandez.deliverylavallevendedores.MainActivity
 import com.axelfernandez.deliverylavallevendedores.R
 import com.axelfernandez.deliverylavallevendedores.models.User
 import com.axelfernandez.deliverylavallevendedores.repository.LoginRepository
@@ -44,7 +44,7 @@ class SplashFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(SplashViewModel::class.java)
         var editor = requireContext().getSharedPreferences("userSession", Context.MODE_PRIVATE)
-        val is_login_ready = editor.getBoolean(getString(R.string.is_login_ready),false)
+        val isLoginReady = LoginUtils.getIsLoginReady(requireContext())
         var remoteConfig = Firebase.remoteConfig
         val configSettings = remoteConfigSettings {
             minimumFetchIntervalInSeconds = 3600
@@ -59,7 +59,7 @@ class SplashFragment : Fragment() {
                 } else {
                     Log.e("TAG", "Can't Connect to Firebase")
                 }
-                if(is_login_ready){
+                if(isLoginReady){
                     login.getToken(LoginUtils.getUserFromSharedPreferences(requireContext()))
                     login.returnData().observe(viewLifecycleOwner, Observer {
                         if(it == null){
@@ -70,16 +70,15 @@ class SplashFragment : Fragment() {
                         val user : User = LoginUtils.getUserFromSharedPreferences(requireContext())
                         user.token = it.access_token
                         LoginUtils.putUserToSharedPreferences(requireContext(),user)
-                        TODO("RedirectTo Home")
+
+                        val intent = Intent(context, HomeActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                        startActivity(intent)
+                        activity?.finish()
                     })
                 }else{
                     //RedirectToLogin
                     findNavController(this).navigate(SplashFragmentDirections.actionSplashFragmentToLoginFragment())
-
-//                    val intent = Intent(requireContext(), MainActivity::class.java)
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-//                    startActivity(intent)
-//                    requireActivity().finish()
                 }
             }    }
 

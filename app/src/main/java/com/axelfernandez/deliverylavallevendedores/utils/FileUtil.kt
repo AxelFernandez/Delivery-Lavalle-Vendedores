@@ -3,12 +3,15 @@ package com.axelfernandez.deliverylavallevendedores.utils
 import android.annotation.SuppressLint
 import android.content.ContentUris
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.util.Log
+import java.io.File
 
 
 object FileUtil {
@@ -96,4 +99,28 @@ object FileUtil {
     private fun isMediaDocument(uri: Uri): Boolean {
         return "com.android.providers.media.documents" == uri.getAuthority()
     }
+
+
+    fun resizeImage(file: File, scaleTo: Int = 1024): File {
+        val bmOptions = BitmapFactory.Options()
+        bmOptions.inJustDecodeBounds = true
+        BitmapFactory.decodeFile(file.absolutePath, bmOptions)
+        val photoW = bmOptions.outWidth
+        val photoH = bmOptions.outHeight
+
+        // Determine how much to scale down the image
+        val scaleFactor = Math.min(photoW / scaleTo, photoH / scaleTo)
+
+        bmOptions.inJustDecodeBounds = false
+        bmOptions.inSampleSize = scaleFactor
+
+        val resized = BitmapFactory.decodeFile(file.absolutePath, bmOptions)
+        file.outputStream().use {
+            resized.compress(Bitmap.CompressFormat.JPEG, 75, it)
+            resized.recycle()
+
+        }
+        return file
+    }
+
 }

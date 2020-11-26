@@ -16,7 +16,7 @@
     <string name="terms_and_conditions">Continuando, Acepto los <a href="https://www.deliverylavalle.com.ar/terminosycondiciones">Terminos y condiciones</a></string>
     <string name="no_conection">Hay problemas de conexion con el servidor, intenta nuevamente</string>
     <string name="company_limits">companyLimits</string>
-    <string name="app_bar_1_maps">\"Definiremos \"</string>
+    <string name="app_bar_1_maps">\Definiremos \</string>
     <string name="app_bar_2_maps">tu alcance de Delivery</string>
     <string name="company_detail">Datos de tu empresa</string>
     <string name="save_company">Guardar Compañia</string>
@@ -30,5 +30,11 @@
     <string name="retry_in_local">Entrega en el Local</string>
     <string name="delivery_method_delivery">Entrega por Delivery</string>
     <string name="photo_selected">Foto Seleccionada</string>
+    <string name="title_activity_home">MainActivity</string>
+    <string name="title_orders">Pedidos</string>
+    <string name="title_category">Categorias</string>
+    <string name="title_products">Productos</string>
+    <string name="title_profile">Perfil</string>
+    <string name="titleComponent">Main Title</string>
 
 </resources>
