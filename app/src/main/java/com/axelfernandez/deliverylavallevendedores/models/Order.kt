@@ -4,14 +4,15 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Order(
+    val id: String,
+    val state: String,
     val address : Address,
+    val dateCreated: String,
+    val retryInLocal: Boolean,
     val paymentMethod: String,
     val total: String,
     val items : List<ProductDetail>,
-    val id: String,
-    val state: String,
-    val dateCreated: String,
-    val retryInLocal: Boolean
+    val client: Client
 ): Parcelable
 
 data class OrderPost(

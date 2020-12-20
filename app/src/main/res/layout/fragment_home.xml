@@ -23,7 +23,8 @@
        android:layout_margin="10dp">
 
       <androidx.recyclerview.widget.RecyclerView
-         android:layout_margin="10dp"
+          android:id="@+id/rv_pending"
+          android:layout_margin="10dp"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"/>
 
@@ -44,12 +45,14 @@
        android:layout_margin="10dp">
 
       <androidx.recyclerview.widget.RecyclerView
+          android:id="@+id/rv_in_process"
           android:layout_margin="10dp"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"/>
    </LinearLayout>
 
    <LinearLayout
+       android:id="@+id/button_orders_closed"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        android:background="@drawable/shape_border"

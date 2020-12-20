@@ -5,25 +5,33 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Product(
-    val id :String,
+    val id :String?,
     val name :String,
     val description :String,
-    val photo :String,
+    val photo :String?,
     val price :String,
-    val category :String
+    val category :String,
+    val availableNow :Boolean?
 ): Parcelable
 
 @Parcelize
 class Products: ArrayList<Product>(), Parcelable
 
-data class ProductRequest(
-    val companyId :String,
-    val category :String?
+data class ProductCategoryRequest(
+    val type :String,
+    var description :String? = null,
+    var descriptionOld : String? = null
 )
 
 data class ProductCategory(
-    val description: String
-)
+    val description: String,
+    val quantity: String
+){
+    override fun toString(): String {
+        return description
+    }
+}
+
 @Parcelize
 data class ProductDetail(
     val id :String,

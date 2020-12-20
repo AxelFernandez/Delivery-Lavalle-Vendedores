@@ -5,8 +5,10 @@
     <color name="red">#D50000</color>
     <color name="redDark">#D50000</color>
     <color name="colorAccent">#4CAF50</color>
+    <color name="green">#4CAF50</color>
     <color name="black">#000000</color>
     <color name="orange">#FF6D00</color>
     <color name="grey">#9FA2A4</color>
+    <color name="blue">#303F9F</color>
 
 </resources>

@@ -17,6 +17,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.axelfernandez.deliverylavallevendedores.HomeActivity
 import com.axelfernandez.deliverylavallevendedores.R
+import com.axelfernandez.deliverylavallevendedores.models.FirebaseToken
 import com.axelfernandez.deliverylavallevendedores.ui.splash.SplashFragmentDirections
 import com.axelfernandez.deliverylavallevendedores.utils.LoginUtils
 import com.axelfernandez.deliverylavallevendedores.utils.ViewUtil
@@ -92,9 +93,9 @@ class LoginFragment : Fragment() {
                         )
                     }
                     val it = it ?: return@Observer
-                    user.clientId = it.clientId
                     user.token = it.access_token
                     LoginUtils.putUserToSharedPreferences(requireContext(), user)
+                    LoginUtils.setIsLoginReady(requireContext(),it.completeRegistry)
                     FirebaseMessaging.getInstance().token.addOnCompleteListener(
                         OnCompleteListener { task ->
                             if (!task.isSuccessful) {
@@ -112,11 +113,10 @@ class LoginFragment : Fragment() {
                             editor.putString("token_firebase", token).apply()
 
                             val user = LoginUtils.getUserFromSharedPreferences(requireContext())
-                            viewModel.sendFirebaseToken(user.token, token)
+                            viewModel.sendFirebaseToken(user.token, FirebaseToken(token))
 
                             //Toast.makeText(requireContext(), token, Toast.LENGTH_SHORT).show()
                         })
-                    var bundle = bundleOf("clientId" to it.clientId)
                     if (it.is_new || !it.completeRegistry) {
                         findNavController(this).navigate(LoginFragmentDirections.actionLoginFragmentToMapsFragment())
                     } else {

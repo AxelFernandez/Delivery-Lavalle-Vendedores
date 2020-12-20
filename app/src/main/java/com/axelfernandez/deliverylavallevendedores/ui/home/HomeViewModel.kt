@@ -3,11 +3,32 @@ package com.axelfernandez.deliverylavallevendedores.ui.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.axelfernandez.deliverylavallevendedores.api.Api
+import com.axelfernandez.deliverylavallevendedores.api.RetrofitFactory
+import com.axelfernandez.deliverylavallevendedores.models.Order
+import com.axelfernandez.deliverylavallevendedores.repository.CompanyRepository
+import com.axelfernandez.deliverylavallevendedores.repository.OrderRepository
 
 class HomeViewModel : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
+    private val orderRepository = OrderRepository(RetrofitFactory.buildService(Api::class.java))
+
+
+    fun solicitPendingOrders(token: String){
+        orderRepository.solicitOrderPending(token)
     }
-    val text: LiveData<String> = _text
+    fun returnPendingOrders(): LiveData<List<Order>> {
+        return orderRepository.returnOrdersPending()
+    }
+
+
+    fun solicitInProgressOrders(token: String){
+        orderRepository.solicitOrderInProgress(token)
+    }
+    fun returnInProgressOrders(): LiveData<List<Order>> {
+        return orderRepository.returnOrdersInProgress()
+    }
+
+
+
 }

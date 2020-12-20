@@ -9,21 +9,116 @@
         android:id="@+id/navigation_home"
         android:name="com.axelfernandez.deliverylavallevendedores.ui.home.HomeFragment"
         android:label="@string/title_orders"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_orderDetail"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:destination="@id/orderDetail" />
+        <action
+            android:id="@+id/action_navigation_home_to_closedOrders"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:destination="@id/closedOrders" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_products"
         android:name="com.axelfernandez.deliverylavallevendedores.ui.products.ProductsFragment"
         android:label="fragment_products"
-        tools:layout="@layout/fragment_products" />
+        tools:layout="@layout/fragment_products" >
+        <action
+            android:id="@+id/action_navigation_products_to_addProduct"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:destination="@id/addProduct" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_category"
         android:name="com.axelfernandez.deliverylavallevendedores.ui.category.CategoryFragment"
         android:label="fragment_category"
-        tools:layout="@layout/fragment_category" />
+        tools:layout="@layout/fragment_category" >
+        <action
+            android:id="@+id/action_navigation_category_to_addCategory"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:destination="@id/addCategory" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_profile"
         android:name="com.axelfernandez.deliverylavallevendedores.ui.profile.ProfileFragment"
         android:label="profile_fragment"
         tools:layout="@layout/profile_fragment" />
+    <fragment
+        android:id="@+id/orderDetail"
+        android:name="com.axelfernandez.deliverylavallevendedores.ui.orderDetail.OrderDetail"
+        android:label="order_detail_fragment"
+        tools:layout="@layout/order_detail_fragment" >
+        <argument
+            android:name="argument_order"
+            app:argType="com.axelfernandez.deliverylavallevendedores.models.Order" />
+        <action
+            android:id="@+id/action_orderDetail_to_mapsLocation"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:destination="@id/mapsLocation" />
+    </fragment>
+    <fragment
+        android:id="@+id/closedOrders"
+        android:name="com.axelfernandez.deliverylavallevendedores.ui.closedOrders.ClosedOrders"
+        android:label="closed_orders_fragment"
+        tools:layout="@layout/closed_orders_fragment" >
+        <action
+            android:id="@+id/action_closedOrders_to_orderDetail"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:destination="@id/orderDetail" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapsLocation"
+        android:name="com.axelfernandez.deliverylavallevendedores.ui.mapLocation.MapsLocation"
+        android:label="fragment_maps_location"
+        tools:layout="@layout/fragment_maps_location" >
+        <argument
+            android:name="address"
+            app:argType="com.axelfernandez.deliverylavallevendedores.models.Address" />
+    </fragment>
+    <fragment
+        android:id="@+id/addCategory"
+        android:name="com.axelfernandez.deliverylavallevendedores.ui.addCategory.AddCategory"
+        android:label="add_category_fragment"
+        tools:layout="@layout/add_category_fragment" >
+        <argument
+            android:name="description"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="Type"
+            app:argType="com.axelfernandez.deliverylavallevendedores.utils.TypeOfView" />
+    </fragment>
+    <fragment
+        android:id="@+id/addProduct"
+        android:name="com.axelfernandez.deliverylavallevendedores.ui.addProduct.AddProduct"
+        android:label="add_product_fragment"
+        tools:layout="@layout/add_product_fragment" >
+        <argument
+            android:name="type"
+            app:argType="com.axelfernandez.deliverylavallevendedores.utils.TypeOfView" />
+        <argument
+            android:name="product"
+            app:argType="com.axelfernandez.deliverylavallevendedores.models.Product"
+            app:nullable="true" />
+    </fragment>
 
 </navigation>

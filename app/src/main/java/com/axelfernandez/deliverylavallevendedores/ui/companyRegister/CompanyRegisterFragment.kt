@@ -75,7 +75,7 @@ class CompanyRegisterFragment : Fragment() {
 
         view.save_company.setOnClickListener {
             val hasFieldsWithErrors = viewModel.validateFields(view,requireContext())
-            if(hasFieldsWithErrors && !isPhotoSelected){
+            if(hasFieldsWithErrors || !isPhotoSelected){
                 return@setOnClickListener
             }
             val user = LoginUtils.getUserFromSharedPreferences(requireContext())
@@ -93,7 +93,7 @@ class CompanyRegisterFragment : Fragment() {
             }
             company.id = it
             LoginUtils.saveDefaultCompany(requireContext(),company)
-
+            LoginUtils.setIsLoginReady(requireContext(), true)
             val intent = Intent(context, HomeActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
@@ -105,7 +105,6 @@ class CompanyRegisterFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val view = view?:return
-        val contentResolver = activity?.contentResolver?:return
         if (requestCode == REQUEST_SELECT_IMAGE_IN_ALBUM && resultCode == RESULT_OK) {
             val selectedFilename = data?.data //The uri with the location of the file
             if (selectedFilename != null) {

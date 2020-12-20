@@ -65,10 +65,11 @@ class SplashFragment : Fragment() {
                         if(it == null){
                             Toast.makeText(requireContext(),"No hay conexion a internet, intentalo de nuevo mas tarde",
                                 Toast.LENGTH_SHORT).show()
+                                return@Observer
                         }
-                        val it = it?:return@Observer
                         val user : User = LoginUtils.getUserFromSharedPreferences(requireContext())
                         user.token = it.access_token
+                        LoginUtils.setIsLoginReady(requireContext(),it.completeRegistry)
                         LoginUtils.putUserToSharedPreferences(requireContext(),user)
 
                         val intent = Intent(context, HomeActivity::class.java)

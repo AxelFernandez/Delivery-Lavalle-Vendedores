@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".ui.closedOrders.ClosedOrders">
+
+    <include layout="@layout/app_bar"/>
+    <com.axelfernandez.deliverylavallevendedores.component.TitleComponent
+        android:id="@+id/closed_orders_empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:visibility="gone"
+        app:title="@string/orders_empty"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/closed_orders_rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

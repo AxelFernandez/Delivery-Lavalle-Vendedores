@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.axelfernandez.deliverylavallevendedores.api.Api
 import com.axelfernandez.deliverylavallevendedores.models.ConfirmationObject
+import com.axelfernandez.deliverylavallevendedores.models.FirebaseToken
 import com.axelfernandez.deliverylavallevendedores.models.User
 import com.axelfernandez.deliverylavallevendedores.models.UserResponse
 
@@ -39,7 +40,7 @@ class LoginRepository (
 
     val tokenLiveData = MutableLiveData<ConfirmationObject>()
 
-    fun sendToken(token: String, firebaseToken:String): MutableLiveData<ConfirmationObject> {
+    fun sendToken(token: String, firebaseToken:FirebaseToken): MutableLiveData<ConfirmationObject> {
         api.sendFirebaseToken(firebaseToken, "Bearer %s".format(token)).enqueue(object : Callback<ConfirmationObject> {
             override fun onFailure(call: Call<ConfirmationObject>, t: Throwable) {
                 tokenLiveData.value = null
