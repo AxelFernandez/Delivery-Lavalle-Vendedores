@@ -38,6 +38,7 @@ class MapsFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(MapsViewModel::class.java)
         val view = view?:return
+        val type = MapsFragmentArgs.fromBundle(arguments?:return).type
         mapWebView = view.findViewById(R.id.webview) as WebView
         mapWebView.addJavascriptInterface(JavascriptInterface(requireContext()), "MyFunction");
         mapWebView.settings.setJavaScriptEnabled(true)
@@ -50,7 +51,7 @@ class MapsFragment : Fragment() {
             if (limit.isNullOrEmpty()){
                 ViewUtil.setSnackBar(view, R.color.orange,"No has definido aun la zona")
             }else{
-                findNavController(this).navigate(MapsFragmentDirections.actionMapsFragmentToCompanyRegisterFragment(limit))
+                findNavController(this).navigate(MapsFragmentDirections.actionMapsFragmentToCompanyRegisterFragment(limit, type))
             }
         }
     }
@@ -62,6 +63,10 @@ class MapsFragment : Fragment() {
         @android.webkit.JavascriptInterface
         fun onButtonClick(toast: String) {
             LoginUtils.saveInMapLimits(toast,mContext)
+        }
+        @android.webkit.JavascriptInterface
+        fun getLimitsSaved(): String? {
+            return LoginUtils.getSaveInMapsLimits(mContext)?:return null
         }
 
     }

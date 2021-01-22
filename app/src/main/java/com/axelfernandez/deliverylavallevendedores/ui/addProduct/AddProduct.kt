@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -16,10 +17,13 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.axelfernandez.deliverylavallevendedores.R
 import com.axelfernandez.deliverylavallevendedores.utils.FileUtil
 import com.axelfernandez.deliverylavallevendedores.utils.LoginUtils
 import com.axelfernandez.deliverylavallevendedores.utils.TypeOfView
+import com.axelfernandez.deliverylavallevendedores.utils.ViewUtil
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.add_product_fragment.view.*
 import kotlinx.android.synthetic.main.add_product_fragment.view.available_now
 import java.io.File
@@ -65,15 +69,44 @@ class AddProduct : Fragment() {
             val spinner = view.findViewById(R.id.spinner_category_product) as Spinner
             val adapter = ArrayAdapter(requireContext(),android.R.layout.simple_spinner_item, it)
             spinner.adapter = adapter
-        })
-
-        view.save_product.setOnClickListener {
-            val hasFieldsWithErrors = viewModel.validateFields(view,requireContext())
-            if(hasFieldsWithErrors || !isPhotoSelected){
-                return@setOnClickListener
+            if(type == TypeOfView.EDIT){
+                val product = args.product?:return@Observer
+                it.forEachIndexed {i, it->
+                    if(product.category == it.description){
+                        spinner.setSelection(i)
+                    }
+                }
             }
+        })
+        viewModel.confirmProductAdded().observe(viewLifecycleOwner, Observer {
+            if(it == null){
+                Toast.makeText(requireContext(),getString(R.string.no_conection),
+                    Toast.LENGTH_SHORT).show()
+                return@Observer
+            }
+            findNavController(this).popBackStack()
+        })
+        view.save_product.setOnClickListener {
+            view.save_product.isEnabled = false
+            val hasFieldsWithErrors = viewModel.validateFields(view,requireContext())
+            if(hasFieldsWithErrors){
+                if (type == TypeOfView.ADD && !isPhotoSelected){
+                    view.save_product.isEnabled = true
+                    ViewUtil.setSnackBar(view,R.color.orange, "Faltan campos por completar")
+                    return@setOnClickListener
+                }
+            }
+            view.add_product_progressbar.isVisible = true
             val product = viewModel.buildProduct(view)
-            viewModel.addNewProduct(user.token,product,photoSelected)
+            if (type == TypeOfView.EDIT){
+               product.id = args.product?.id
+            }
+            if (isPhotoSelected){
+                viewModel.addNewProduct(user.token,product,photoSelected,type.value)
+            }else{
+                viewModel.updateProduct(user.token,product)
+            }
+
         }
 
         view.product_add_photo.setOnClickListener{
@@ -81,8 +114,9 @@ class AddProduct : Fragment() {
             intent.type = "image/*"
             checkStoragePermissions(requireActivity(),intent)
         }
-        if (type == TypeOfView.EDIT){
-
+        if(type == TypeOfView.EDIT){
+            val product = args.product?:return
+            viewModel.editBind(view, product, requireContext())
         }
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -92,7 +126,7 @@ class AddProduct : Fragment() {
             val selectedFilename = data?.data //The uri with the location of the file
             if (selectedFilename != null) {
                 photoSelected = File(FileUtil.getPath(selectedFilename,requireContext())?:return)
-                photoSelected = FileUtil.resizeImage(photoSelected)
+                photoSelected = FileUtil.resizeImage(photoSelected!!)
                 isPhotoSelected = true
                 view.product_add_photo.text = getString(R.string.photo_selected)
                 view.product_image.setImageURI(selectedFilename)

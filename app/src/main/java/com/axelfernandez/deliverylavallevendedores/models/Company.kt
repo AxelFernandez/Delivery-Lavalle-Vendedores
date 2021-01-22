@@ -10,10 +10,11 @@ data class Company(
     val description :String,
     val phone :String,
     var photo: String?,
+    val rating :Float = 0f,
     val address :String,
     val availableNow :Boolean,
-    val paymentMethods :List<String>,
-    val deliveryMethods :List<String>,
+    val paymentMethods :List<String>?,
+    val deliveryMethods :List<String>?,
     var category :String?,
     val limits :String
 ): Parcelable

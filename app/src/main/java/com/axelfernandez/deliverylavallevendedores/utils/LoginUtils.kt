@@ -54,8 +54,9 @@ class LoginUtils {
             editor.putString("photo",company.photo)
             editor.putString("address",company.address)
             editor.putBoolean("availableNow",company.availableNow)
-            editor.putStringSet("paymentMethods",company.paymentMethods.toSet())
-            editor.putStringSet("deliveryMethods",company.deliveryMethods.toSet())
+            editor.putFloat("rating",company.rating)
+            editor.putStringSet("paymentMethods",company.paymentMethods?.toSet())
+            editor.putStringSet("deliveryMethods",company.deliveryMethods?.toSet())
             editor.putString("category",company.category)
             editor.putString("limits",company.limits)
             editor.apply()
@@ -71,9 +72,10 @@ class LoginUtils {
                 address = sharedPreferences.getString("address","null").toString(),
                 category = sharedPreferences.getString("category","null").toString(),
                 limits = sharedPreferences.getString("limits","null").toString(),
-                availableNow = sharedPreferences.getBoolean("availibleNow",false),
-                paymentMethods = sharedPreferences.getStringSet("paymentMethods",null)?.toList() as List<String>,
-                deliveryMethods = sharedPreferences.getStringSet("deliveryMethods",null)?.toList() as List<String>
+                rating = sharedPreferences.getFloat("rating",0f),
+                availableNow = sharedPreferences.getBoolean("availableNow",false),
+                paymentMethods = sharedPreferences.getStringSet("paymentMethods", ArrayList<String>().toSet())?.toList() as List<String>,
+                deliveryMethods = sharedPreferences.getStringSet("deliveryMethods",ArrayList<String>().toSet())?.toList() as List<String>
             )
         }
 

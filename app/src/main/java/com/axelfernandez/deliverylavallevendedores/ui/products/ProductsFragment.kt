@@ -22,6 +22,7 @@ import com.axelfernandez.deliverylavallevendedores.models.User
 import com.axelfernandez.deliverylavallevendedores.ui.category.CategoryFragmentDirections
 import com.axelfernandez.deliverylavallevendedores.utils.LoginUtils
 import com.axelfernandez.deliverylavallevendedores.utils.TypeOfView
+import com.axelfernandez.deliverylavallevendedores.utils.ViewUtil
 import kotlinx.android.synthetic.main.fragment_category.view.*
 import kotlinx.android.synthetic.main.fragment_products.view.*
 
@@ -40,11 +41,20 @@ class ProductsFragment : Fragment() {
         productsViewModel =
             ViewModelProviders.of(this).get(ProductsViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_products, container, false)
+        var hadNoCategories : Boolean = false
         user =  LoginUtils.getUserFromSharedPreferences(requireContext())
         productRv = root.findViewById(R.id.products_rv) as RecyclerView
 
         productsViewModel.solicitProduct(user.token)
+        productsViewModel.getCategories(user.token)
 
+
+        productsViewModel.returnCategories().observe(viewLifecycleOwner, Observer {
+            if (it == null || it.isEmpty()){
+                hadNoCategories = true
+                return@Observer
+            }
+        })
         productsViewModel.returnProducts().observe(viewLifecycleOwner, Observer {
             if (it == null){
                 root.product_empty?.isVisible = true
@@ -55,17 +65,28 @@ class ProductsFragment : Fragment() {
             val productAdapter = ProductAdapter(it,requireContext(), {onEditSelected(it)}, {onDeleteSelected(it)})
             productRv.adapter = productAdapter
         })
-
+        productsViewModel.returnConfirmDeleted().observe(viewLifecycleOwner, Observer {
+            if (it == null){
+                ViewUtil.setSnackBar(root,R.color.orange, getString(R.string.no_conection))
+                return@Observer
+            }
+            ViewUtil.setSnackBar(root,R.color.green, getString(R.string.deleted))
+            productsViewModel.solicitProduct(user.token)
+        })
         root.product_add.setOnClickListener {
+            if (hadNoCategories){
+                ViewUtil.setSnackBar(root,R.color.orange, "No hay categorias, debes crear una antes de continuar")
+                return@setOnClickListener
+            }
             findNavController(this).navigate(ProductsFragmentDirections.actionNavigationProductsToAddProduct(TypeOfView.ADD,null))
         }
         return root
     }
     private fun onEditSelected(product: Product){
-        //NavHostFragment.findNavController(this).navigate(CategoryFragmentDirections.actionNavigationCategoryToAddCategory(productCategory.description, TypeOfView.EDIT))
+        findNavController(this).navigate(ProductsFragmentDirections.actionNavigationProductsToAddProduct(TypeOfView.EDIT,product))
 
     }
     private fun onDeleteSelected(product: Product){
-        //productsViewModel.deleteCategory(user.token, ProductCategoryRequest(TypeOfView.DELETE.value, productCategory.description))
+        productsViewModel.deleteProduct(user.token,product)
     }
 }

@@ -55,7 +55,36 @@
         android:id="@+id/navigation_profile"
         android:name="com.axelfernandez.deliverylavallevendedores.ui.profile.ProfileFragment"
         android:label="profile_fragment"
-        tools:layout="@layout/profile_fragment" />
+        tools:layout="@layout/profile_fragment" >
+        <action
+            android:id="@+id/action_navigation_profile_to_mapsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:destination="@id/mapsFragment" />
+        <action
+            android:id="@+id/action_navigation_profile_to_sellsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:destination="@id/sellsFragment" />
+        <action
+            android:id="@+id/action_navigation_profile_to_closedOrders"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:destination="@id/closedOrders" />
+        <action
+            android:id="@+id/action_navigation_profile_to_reviewsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:destination="@id/reviewsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/orderDetail"
         android:name="com.axelfernandez.deliverylavallevendedores.ui.orderDetail.OrderDetail"
@@ -71,6 +100,13 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"
             app:destination="@id/mapsLocation" />
+        <action
+            android:id="@+id/action_orderDetail_to_meliLinkFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:destination="@id/meliLinkFragment" />
     </fragment>
     <fragment
         android:id="@+id/closedOrders"
@@ -119,6 +155,49 @@
             android:name="product"
             app:argType="com.axelfernandez.deliverylavallevendedores.models.Product"
             app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.axelfernandez.deliverylavallevendedores.ui.map.MapsFragment"
+        android:label="maps_fragment"
+        tools:layout="@layout/maps_fragment" >
+        <action
+            android:id="@+id/action_mapsFragment_to_companyRegisterFragment"
+            app:destination="@id/companyRegisterFragment" />
+        <argument
+            android:name="type"
+            app:argType="com.axelfernandez.deliverylavallevendedores.utils.TypeOfView" />
+    </fragment>
+    <fragment
+        android:id="@+id/companyRegisterFragment"
+        android:name="com.axelfernandez.deliverylavallevendedores.ui.companyRegister.CompanyRegisterFragment"
+        android:label="company_register_fragment"
+        tools:layout="@layout/company_register_fragment" >
+        <argument
+            android:name="arguments_limits"
+            app:argType="string" />
+        <argument
+            android:name="type"
+            app:argType="com.axelfernandez.deliverylavallevendedores.utils.TypeOfView" />
+    </fragment>
+    <fragment
+        android:id="@+id/sellsFragment"
+        android:name="com.axelfernandez.deliverylavallevendedores.ui.sells.SellsFragment"
+        android:label="sells_fragment"
+        tools:layout="@layout/sells_fragment" />
+    <fragment
+        android:id="@+id/reviewsFragment"
+        android:name="com.axelfernandez.deliverylavallevendedores.ui.reviews.ReviewsFragment"
+        android:label="reviews_fragment"
+        tools:layout="@layout/reviews_fragment" />
+    <fragment
+        android:id="@+id/meliLinkFragment"
+        android:name="com.axelfernandez.deliverylavallevendedores.ui.meliLink.MeliLinkFragment"
+        android:label="meli_link_fragment"
+        tools:layout="@layout/meli_link_fragment" >
+        <argument
+            android:name="orderId"
+            app:argType="string" />
     </fragment>
 
 </navigation>

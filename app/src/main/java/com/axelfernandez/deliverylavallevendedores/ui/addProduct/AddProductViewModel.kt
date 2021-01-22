@@ -2,6 +2,7 @@ package com.axelfernandez.deliverylavallevendedores.ui.addProduct
 
 import android.content.Context
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.axelfernandez.deliverylavallevendedores.R
@@ -10,6 +11,7 @@ import com.axelfernandez.deliverylavallevendedores.api.RetrofitFactory
 import com.axelfernandez.deliverylavallevendedores.models.Product
 import com.axelfernandez.deliverylavallevendedores.models.ProductCategory
 import com.axelfernandez.deliverylavallevendedores.repository.ProductRepository
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.add_product_fragment.view.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -50,8 +52,12 @@ class AddProductViewModel : ViewModel() {
     fun returnProductsCategory(): LiveData<List<ProductCategory>> {
         return productRepository.returnProductCategory()
     }
+    fun updateProduct(token: String, product: Product){
+        productRepository.updateProduct(token, product)
+    }
 
-    fun addNewProduct(token: String, product: Product, file : File){
+
+    fun addNewProduct(token: String, product: Product, file : File, typeOfView: String){
         val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
         val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
         val name = MultipartBody.Part.createFormData("name", product.name, requestFile)
@@ -59,7 +65,9 @@ class AddProductViewModel : ViewModel() {
         val price = MultipartBody.Part.createFormData("price", product.price, requestFile)
         val availableNow = MultipartBody.Part.createFormData("availableNow", product.availableNow.toString(), requestFile)
         val category = MultipartBody.Part.createFormData("category", product.category, requestFile)
-        productRepository.addProduct(token, body,name,description,price, category,availableNow)
+        val typeOfView = MultipartBody.Part.createFormData("type", typeOfView, requestFile)
+        val id = MultipartBody.Part.createFormData("id", product.id, requestFile)
+        productRepository.addProduct(token, body,name,description,price, category,availableNow,typeOfView,id)
     }
 
     fun confirmProductAdded(): LiveData<String> {
@@ -75,5 +83,23 @@ class AddProductViewModel : ViewModel() {
             category = view.spinner_category_product.selectedItem.toString(),
             photo = null
         )
+    }
+
+    fun editBind(view: View, product: Product,context: Context){
+        view.add_name_product_field.setText(product.name)
+        view.add_name_product_field.isFocusable = false
+        view.add_name_product_field.isEnabled = false
+        view.add_name_description_field.setText(product.description)
+        view.add_name_description_field.isFocusable = false
+        view.add_name_description_field.isEnabled = false
+
+        view.add_price_product_field.setText(product.price)
+
+        view.available_now.isChecked = product.availableNow?:return
+
+        view.product_add_photo.setText(context.getString(R.string.photo_selected))
+        view.product_image.isVisible = true
+        Picasso.with(context).load(product.photo).into(view.product_image)
+
     }
 }

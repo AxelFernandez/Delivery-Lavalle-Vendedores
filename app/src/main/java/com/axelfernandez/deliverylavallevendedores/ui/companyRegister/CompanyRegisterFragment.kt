@@ -22,6 +22,7 @@ import com.axelfernandez.deliverylavallevendedores.R
 import com.axelfernandez.deliverylavallevendedores.models.Company
 import com.axelfernandez.deliverylavallevendedores.utils.FileUtil
 import com.axelfernandez.deliverylavallevendedores.utils.LoginUtils
+import com.axelfernandez.deliverylavallevendedores.utils.TypeOfView
 import com.axelfernandez.deliverylavallevendedores.utils.ViewUtil
 import kotlinx.android.synthetic.main.company_register_fragment.view.*
 import java.io.File
@@ -52,6 +53,7 @@ class CompanyRegisterFragment : Fragment() {
         val user = LoginUtils.getUserFromSharedPreferences(requireContext())
         val view = view?:return
         val arguments = arguments?:return
+        val type = CompanyRegisterFragmentArgs.fromBundle(arguments).type
         view.available_now.textOn = "Si"
         view.available_now.textOff = "No"
         view.available_now.isChecked = true
@@ -65,8 +67,24 @@ class CompanyRegisterFragment : Fragment() {
             val spinner = view.findViewById(R.id.spinner_category) as Spinner
             val adapter = ArrayAdapter(requireContext(),android.R.layout.simple_spinner_item, it)
             spinner.adapter = adapter
+            if(type == TypeOfView.EDIT){
+                val category = LoginUtils.getDefaultCompany(requireContext()).category?:return@Observer
+                it.forEachIndexed {i, it->
+                    if(category == it.description){
+                        spinner.setSelection(i)
+                    }
+                }
+            }
         })
 
+        if(type == TypeOfView.EDIT){
+            val company = LoginUtils.getDefaultCompany(requireContext())
+            viewModel.bind(view, requireContext(),company)
+            viewModel.getCompanyData(user.token)
+        }
+        viewModel.returnData().observe(viewLifecycleOwner, Observer {
+            viewModel.bind(view,requireContext(),it)
+        })
         view.company_register_add_photo.setOnClickListener {
             val intent = Intent(Intent.ACTION_GET_CONTENT)
             intent.type = "image/*"
@@ -75,13 +93,17 @@ class CompanyRegisterFragment : Fragment() {
 
         view.save_company.setOnClickListener {
             val hasFieldsWithErrors = viewModel.validateFields(view,requireContext())
-            if(hasFieldsWithErrors || !isPhotoSelected){
+            if(hasFieldsWithErrors){
                 return@setOnClickListener
             }
             val user = LoginUtils.getUserFromSharedPreferences(requireContext())
             val limits = arguments.getString(getString(R.string.arguments_limits))?:return@setOnClickListener
             company = viewModel.buildCompany(view,requireContext(),limits)
-            viewModel.registryCompany(user.token, company, photoSelected, limits)
+            if(!isPhotoSelected){
+                viewModel.registryCompanyNoImage(user.token,company)
+            }else{
+                viewModel.registryCompany(user.token, company, photoSelected, limits)
+            }
             view.progress_bar_registry.isVisible = true
         }
 

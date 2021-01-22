@@ -43,6 +43,9 @@
             app:popExitAnim="@anim/slide_out_right"
             android:id="@+id/action_mapsFragment_to_companyRegisterFragment"
             app:destination="@id/companyRegisterFragment" />
+        <argument
+            android:name="type"
+            app:argType="com.axelfernandez.deliverylavallevendedores.utils.TypeOfView" />
     </fragment>
     <fragment
         android:id="@+id/companyRegisterFragment"
@@ -52,5 +55,8 @@
         <argument
             android:name="arguments_limits"
             app:argType="string" />
+        <argument
+            android:name="type"
+            app:argType="com.axelfernandez.deliverylavallevendedores.utils.TypeOfView" />
     </fragment>
 </navigation>

@@ -31,16 +31,24 @@
 
         function initMap() {
 
-    map = new google.maps.Map(document.getElementById("map"), {
-        center: { lat: parseFloat(currentLat) , lng: parseFloat(currentLong) },
-        zoom: 12
-    });
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: parseFloat(currentLat) , lng: parseFloat(currentLong) },
+            zoom: 12
+        });
 
     var northJson = currentLat + 0.0100;
     var southJson = currentLat - 0.0100;
     var eastJson = currentLong + 0.0100;
     var westJson = currentLong - 0.0100;
 
+    var boundSaved = MyFunction.getLimitsSaved()
+    if(boundSaved != null){
+        var json = JSON.parse(boundSaved)
+        var northJson = json.north;
+        var southJson = json.south;
+        var eastJson = json.east;
+        var westJson = json.west;
+    }
 
     const bounds = {
         north: northJson,

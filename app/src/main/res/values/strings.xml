@@ -72,5 +72,15 @@
     <string name="save_product">Guardar Producto</string>
     <string name="stock_available">¿Tenes stock disponible?</string>
     <string name="upload_a_product_image">Sube una imagen del Producto</string>
+    <string name="no_stock">Sin stock</string>
+    <string name="deleted">Eliminado Correctamente</string>
+    <string name="log_out">Cerrar Sesion</string>
+    <string name="usage_label">Llevas $ %s de uso de la plataforma este mes</string>
+    <string name="there_is_no_reviews">No hay reseñas de aqui</string>
+    <string name="order_something_to_add_a_review">Pide algo para añadir una reseña aqui</string>
+    <string name="meli_link">Link de Mercado Pago</string>
+    <string name="meli_link_title">Pega el Link de Mercado Pago aqui para que tu cliente pueda pagarte</string>
+    <string name="send_meli_link">Enviar Link</string>
+
 
 </resources>

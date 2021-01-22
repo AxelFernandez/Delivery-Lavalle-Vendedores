@@ -24,8 +24,16 @@ data class OrderPost(
     val retryInLocal: Boolean
 )
 data class MeliLink(
-    val isAvailable :Boolean,
+    val isAvailable :Boolean?,
+    val orderId: String?,
     val link:String?
+)
+
+data class Review(
+    val description :String?,
+    val order : String?,
+    val rating:String,
+    val userName:String? = null
 )
 
 @Parcelize

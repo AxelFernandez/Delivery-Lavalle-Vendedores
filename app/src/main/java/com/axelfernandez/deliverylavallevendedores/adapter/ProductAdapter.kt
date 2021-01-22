@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.axelfernandez.deliverylavallevendedores.R
 import com.axelfernandez.deliverylavallevendedores.models.Product
@@ -45,6 +46,7 @@ class ProductAdapter(
         private val image : ImageView = itemView.findViewById(R.id.item_product_image) as ImageView
         private val edit : ImageView = itemView.findViewById(R.id.item_product_edit) as ImageView
         private val delete : ImageView = itemView.findViewById(R.id.item_product_delete) as ImageView
+        private val outStock : TextView = itemView.findViewById(R.id.had_stock) as TextView
 
         fun bind(
             item: Product,
@@ -53,6 +55,9 @@ class ProductAdapter(
             context: Context
         ){
             title.text = item.name
+            if(item.availableNow == false){
+                outStock.isVisible = true
+            }
             subtitle.text = item.description
             price.text = item.price
             Picasso.with(context).load(item.photo).into(image)

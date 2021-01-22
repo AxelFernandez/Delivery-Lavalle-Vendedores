@@ -10,6 +10,7 @@ import com.axelfernandez.deliverylavallevendedores.models.Order
 import com.axelfernandez.deliverylavallevendedores.models.Product
 import com.axelfernandez.deliverylavallevendedores.models.ProductCategory
 import com.axelfernandez.deliverylavallevendedores.models.ProductCategoryRequest
+import com.axelfernandez.deliverylavallevendedores.utils.TypeOfView
 import com.axelfernandez.deliverylavallevendedores.utils.ViewUtil
 import okhttp3.MultipartBody
 import retrofit2.Call
@@ -97,10 +98,13 @@ class ProductRepository(private val api : Api){
                         description : MultipartBody.Part,
                         price : MultipartBody.Part,
                         category : MultipartBody.Part,
-                        availableNow : MultipartBody.Part
+                        availableNow : MultipartBody.Part,
+                        typeOfView:  MultipartBody.Part,
+                        id:  MultipartBody.Part
+
 
     ): MutableLiveData<String> {
-        api.addProduct("Bearer %s".format(token),file,name,description,price, category, availableNow).enqueue(object :Callback<String>{
+        api.addProduct("Bearer %s".format(token),file,name,description,price, category, availableNow, typeOfView,id).enqueue(object :Callback<String>{
 
             override fun onFailure(call: Call<String>, t: Throwable) {
                 data.value= null
@@ -118,5 +122,32 @@ class ProductRepository(private val api : Api){
         return data
     }
 
+    fun updateProduct(token:String, product: Product): MutableLiveData<String> {
+        api.updateProduct(product,"Bearer %s".format(token)).enqueue(object : Callback<String>{
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                data.value = null
+            }
+
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                data.value = response.body()
+            }
+
+        })
+        return data
+    }
+
+    fun deleteProduct(token:String, product: Product): MutableLiveData<String> {
+        api.deleteProduct(product,"Bearer %s".format(token)).enqueue(object : Callback<String>{
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                data.value = null
+            }
+
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                data.value = response.body()
+            }
+
+        })
+        return data
+    }
 
 }

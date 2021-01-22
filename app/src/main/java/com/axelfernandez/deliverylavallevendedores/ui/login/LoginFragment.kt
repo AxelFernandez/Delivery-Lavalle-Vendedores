@@ -20,6 +20,7 @@ import com.axelfernandez.deliverylavallevendedores.R
 import com.axelfernandez.deliverylavallevendedores.models.FirebaseToken
 import com.axelfernandez.deliverylavallevendedores.ui.splash.SplashFragmentDirections
 import com.axelfernandez.deliverylavallevendedores.utils.LoginUtils
+import com.axelfernandez.deliverylavallevendedores.utils.TypeOfView
 import com.axelfernandez.deliverylavallevendedores.utils.ViewUtil
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -118,7 +119,7 @@ class LoginFragment : Fragment() {
                             //Toast.makeText(requireContext(), token, Toast.LENGTH_SHORT).show()
                         })
                     if (it.is_new || !it.completeRegistry) {
-                        findNavController(this).navigate(LoginFragmentDirections.actionLoginFragmentToMapsFragment())
+                        findNavController(this).navigate(LoginFragmentDirections.actionLoginFragmentToMapsFragment(TypeOfView.ADD))
                     } else {
                         val intent = Intent(context, HomeActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)

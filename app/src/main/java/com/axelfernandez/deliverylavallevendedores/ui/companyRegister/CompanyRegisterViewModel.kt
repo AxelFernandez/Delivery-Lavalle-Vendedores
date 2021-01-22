@@ -5,6 +5,7 @@ import android.os.Build
 import android.view.View
 import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.content.ContextCompat.checkSelfPermission
+import androidx.core.view.isVisible
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.axelfernandez.deliverylavallevendedores.R
@@ -14,7 +15,9 @@ import com.axelfernandez.deliverylavallevendedores.models.Company
 import com.axelfernandez.deliverylavallevendedores.models.CompanyCategoryResponse
 import com.axelfernandez.deliverylavallevendedores.repository.CompanyCategoryRepository
 import com.axelfernandez.deliverylavallevendedores.repository.CompanyRepository
+import com.axelfernandez.deliverylavallevendedores.utils.LoginUtils
 import com.axelfernandez.deliverylavallevendedores.utils.ViewUtil
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.company_register_fragment.view.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -82,8 +85,8 @@ class CompanyRegisterViewModel : ViewModel() {
         val phone = MultipartBody.Part.createFormData("phone", company.phone, requestFile)
         val address = MultipartBody.Part.createFormData("address", company.address, requestFile)
         val availableNow = MultipartBody.Part.createFormData("availableNow", company.availableNow.toString(), requestFile)
-        val paymentMethod = MultipartBody.Part.createFormData("paymentMethod", company.paymentMethods.toString(), requestFile)
-        val deliveryMethod = MultipartBody.Part.createFormData("deliveryMethod", company.deliveryMethods.toString(), requestFile)
+        val paymentMethod = MultipartBody.Part.createFormData("paymentMethods", company.paymentMethods.toString(), requestFile)
+        val deliveryMethod = MultipartBody.Part.createFormData("deliveryMethods", company.deliveryMethods.toString(), requestFile)
         val category = MultipartBody.Part.createFormData("category", company.category, requestFile)
         val limit = MultipartBody.Part.createFormData("limits", limits, requestFile)
 
@@ -117,4 +120,42 @@ class CompanyRegisterViewModel : ViewModel() {
 
     }
 
+    fun registryCompanyNoImage(token: String,company: Company){
+        companyRepository.registerCompanyNoImage(token,company)
+    }
+
+    fun bind(view : View, context: Context, company: Company){
+        view.name.setText(company.name)
+        view.description.setText(company.description)
+        view.address.setText(company.address)
+        view.phone.setText(company.phone)
+        view.company_register_add_photo.text = context.getString(R.string.photo_selected)
+        Picasso.with(context).load(company.photo).into(view.company_image)
+        view.company_image.isVisible = true
+        view.available_now.isChecked = company.availableNow
+        company.paymentMethods?.forEach {
+            if(it == context.getString(R.string.cash)){
+                view.payment_method_cash.isChecked = true
+            }
+            if(it == context.getString(R.string.mercado_pago)){
+                view.payment_method_cash.isChecked = true
+            }
+        }
+        company.deliveryMethods?.forEach {
+            if(it == context.getString(R.string.retry_in_local)){
+                view.delivery_method_in_local.isChecked = true
+            }
+            if(it == context.getString(R.string.delivery_method_delivery)){
+                view.delivery_method_delivery.isChecked = true
+            }
+        }
+    }
+
+    fun getCompanyData(token:String){
+        companyRepository.getCompanyData(token)
+    }
+
+    fun returnData(): LiveData<Company> {
+        return companyRepository.returnCompany()
+    }
 }

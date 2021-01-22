@@ -28,6 +28,12 @@ interface Api {
     @GET("product")
     fun getProducts(@Header("Authorization") token: String):Call<List<Product>>
 
+    @POST("product")
+    fun updateProduct( @Body product:Product, @Header("Authorization") token: String):Call<String>
+
+    @POST("product_delete")
+    fun deleteProduct( @Body product:Product, @Header("Authorization") token: String):Call<String>
+
     @POST("product_category_delete")
     fun deleteProductCategory(@Body categoryRequest: ProductCategoryRequest, @Header("Authorization") token: String):Call<String>
 
@@ -48,6 +54,24 @@ interface Api {
 
     @POST("cancel")
     fun cancelOrder(@Body id:String, @Header("Authorization") token: String):Call<Order>
+
+    @GET("company")
+    fun getCompany(@Header("Authorization") token: String):Call<Company>
+
+    @POST("company")
+    fun registryCompanyNoImage(@Header("Authorization") token: String, @Body company : Company):Call<String>
+
+    @GET("account_debit")
+    fun getAccountDebit(@Header("Authorization") token: String):Call<String>
+
+    @GET("reviews")
+    fun getReviews(@Header("Authorization") token: String, @Query("company") clientId:String):Call<List<Review>>
+
+    @POST("getMeliLink")
+    fun getMeLiLink(@Header("Authorization") token: String, @Body orderId: String):Call<MeliLink>
+
+    @POST("sendMeliLink")
+    fun sendMeLiLink(@Header("Authorization") token: String, @Body link: MeliLink):Call<String>
 
     @Multipart
     @POST("company")
@@ -72,6 +96,8 @@ interface Api {
                         @Part description : MultipartBody.Part,
                         @Part price : MultipartBody.Part,
                         @Part category : MultipartBody.Part,
-                        @Part availableNow : MultipartBody.Part
+                        @Part availableNow : MultipartBody.Part,
+                        @Part typeOfView : MultipartBody.Part,
+                        @Part id : MultipartBody.Part
     ): Call<String>
 }

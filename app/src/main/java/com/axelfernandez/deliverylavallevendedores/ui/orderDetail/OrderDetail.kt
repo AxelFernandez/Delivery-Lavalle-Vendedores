@@ -73,6 +73,9 @@ class OrderDetail : Fragment() {
         view.detail_order_cancel_order.setOnClickListener {
             viewModel.cancelOrder(order.id, user.token)
         }
+        view.detail_order_meli_link.setOnClickListener {
+            NavHostFragment.findNavController(this).navigate(OrderDetailDirections.actionOrderDetailToMeliLinkFragment(order.id))
+        }
 
     }
 

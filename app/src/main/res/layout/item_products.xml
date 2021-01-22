@@ -39,6 +39,17 @@
                     tools:text="Venta de pollos asados "
                     />
                 <TextView
+                    android:id="@+id/had_stock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textSize="18sp"
+                    android:textColor="@color/red"
+                    android:layout_marginBottom="10dp"
+                    android:visibility="gone"
+                    android:text="@string/no_stock"
+                    />
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
