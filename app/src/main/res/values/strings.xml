@@ -81,6 +81,9 @@
     <string name="meli_link">Link de Mercado Pago</string>
     <string name="meli_link_title">Pega el Link de Mercado Pago aqui para que tu cliente pueda pagarte</string>
     <string name="send_meli_link">Enviar Link</string>
+    <string name="there_no_are_invoices">No hay periodos de Facturacion</string>
+    <string name="come_back_later_invoices">Vuelve a principio de cada mes para verlo</string>
+    <string name="period_label">Facturacion del periodo %s</string>
 
 
 </resources>

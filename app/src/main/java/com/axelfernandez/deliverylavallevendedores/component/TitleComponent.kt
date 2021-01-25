@@ -29,4 +29,13 @@ class TitleComponent @JvmOverloads constructor(
             typedArray.recycle()
         }
     }
+
+    var title: String
+        get() {
+            return component_title_title.text.toString()
+        }
+        set(value) {
+            component_title_title.text = value
+
+        }
 }

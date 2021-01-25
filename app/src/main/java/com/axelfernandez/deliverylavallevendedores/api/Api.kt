@@ -73,6 +73,12 @@ interface Api {
     @POST("sendMeliLink")
     fun sendMeLiLink(@Header("Authorization") token: String, @Body link: MeliLink):Call<String>
 
+    @GET("invoices")
+    fun getInvoices(@Header("Authorization") token: String):Call<List<Invoice>>
+
+    @GET("hadPendingInvoices")
+    fun hadPendingInvoices(@Header("Authorization") token: String):Call<Boolean>
+
     @Multipart
     @POST("company")
     fun registryCompany(@Header("Authorization") token: String,

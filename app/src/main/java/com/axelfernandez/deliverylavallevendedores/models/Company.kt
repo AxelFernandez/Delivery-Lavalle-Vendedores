@@ -29,4 +29,11 @@ data class CompanyCategoryResponse(
 }
 
 
+data class Invoice(
+    val period : String,
+    val mount : Float,
+    val status : String,
+    val dateCreated : String,
+    val datePayed : String?
+)
 

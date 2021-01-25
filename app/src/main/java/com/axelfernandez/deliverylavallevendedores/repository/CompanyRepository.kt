@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.axelfernandez.deliverylavallevendedores.api.Api
 import com.axelfernandez.deliverylavallevendedores.models.Company
+import com.axelfernandez.deliverylavallevendedores.models.Invoice
 import com.axelfernandez.deliverylavallevendedores.models.ProductCategory
 import okhttp3.MultipartBody
 import retrofit2.Call
@@ -17,6 +18,8 @@ class CompanyRepository (
     val data = MutableLiveData<String>()
     val dataAccountDebit = MutableLiveData<String>()
     val companyData = MutableLiveData<Company>()
+    val invoices = MutableLiveData<List<Invoice>>()
+    val pendingInvoices = MutableLiveData<Boolean>()
 
     fun registerCompany(token: String,
                         file : MultipartBody.Part,
@@ -98,5 +101,43 @@ class CompanyRepository (
     }
     fun returnCompanyAccountDebit(): LiveData<String> {
         return dataAccountDebit
+    }
+
+
+    fun getInvoices(token: String): MutableLiveData<List<Invoice>> {
+        api.getInvoices("Bearer %s".format(token)).enqueue(object :Callback<List<Invoice>>{
+
+            override fun onFailure(call: Call<List<Invoice>>, t: Throwable) {
+                invoices.value= null
+            }
+
+            override fun onResponse(call: Call<List<Invoice>>, response: Response<List<Invoice>>) {
+                invoices.value = response.body()
+            }
+
+        })
+        return invoices
+    }
+    fun returnInvoices(): LiveData<List<Invoice>> {
+        return invoices
+    }
+
+
+    fun hadPendingInvoices(token: String): MutableLiveData<Boolean> {
+        api.hadPendingInvoices("Bearer %s".format(token)).enqueue(object :Callback<Boolean>{
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                pendingInvoices.value= null
+            }
+
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                pendingInvoices.value = response.body()
+            }
+
+        })
+        return pendingInvoices
+    }
+    fun returnHadPendingInvoices(): LiveData<Boolean> {
+        return pendingInvoices
     }
 }

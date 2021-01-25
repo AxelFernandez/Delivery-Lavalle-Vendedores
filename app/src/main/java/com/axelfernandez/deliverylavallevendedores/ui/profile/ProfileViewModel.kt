@@ -38,5 +38,10 @@ class ProfileViewModel : ViewModel() {
         return companyRepository.returnCompanyAccountDebit()
     }
 
-
+    fun fetchPendingInvoices(token: String){
+        companyRepository.hadPendingInvoices(token)
+    }
+    fun returnFetchPendingInvoices(): LiveData<Boolean> {
+        return companyRepository.returnHadPendingInvoices()
+    }
 }

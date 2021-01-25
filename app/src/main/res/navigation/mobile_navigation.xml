@@ -84,6 +84,13 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"
             app:destination="@id/reviewsFragment" />
+        <action
+            android:id="@+id/action_navigation_profile_to_invoiceFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:destination="@id/invoiceFragment" />
     </fragment>
     <fragment
         android:id="@+id/orderDetail"
@@ -199,5 +206,10 @@
             android:name="orderId"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/invoiceFragment"
+        android:name="com.axelfernandez.deliverylavallevendedores.ui.invoice.InvoiceFragment"
+        android:label="invoice_fragment"
+        tools:layout="@layout/invoice_fragment" />
 
 </navigation>

@@ -6,12 +6,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment
 import com.axelfernandez.deliverylavallevendedores.R
 import com.axelfernandez.deliverylavallevendedores.utils.LoginUtils
 import com.axelfernandez.deliverylavallevendedores.utils.TypeOfView
 import kotlinx.android.synthetic.main.profile_fragment.view.*
+import kotlinx.android.synthetic.main.reviews_fragment.view.*
 
 class ProfileFragment : Fragment() {
 
@@ -35,6 +37,7 @@ class ProfileFragment : Fragment() {
         val user = LoginUtils.getUserFromSharedPreferences(requireContext())
         viewModel.getCompanyData(user.token)
         viewModel.getAccountDebit(user.token)
+        viewModel.fetchPendingInvoices(user.token)
         viewModel.returnData().observe(viewLifecycleOwner, Observer {
             viewModel.bind(it,requireContext(),view)
             LoginUtils.saveDefaultCompany(requireContext(),it)
@@ -43,6 +46,15 @@ class ProfileFragment : Fragment() {
 
         viewModel.returnAccountDebit().observe(viewLifecycleOwner, Observer {
             view.usage_detail.text = getString(R.string.usage_label,it)
+        })
+
+        viewModel.returnFetchPendingInvoices().observe(viewLifecycleOwner, Observer {
+            if (it == null){
+                return@Observer
+            }
+            if (it == true){
+                view.invoice_pending.isVisible = true
+            }
         })
 
         view.settings_update.setOnClickListener {
@@ -54,6 +66,9 @@ class ProfileFragment : Fragment() {
         }
         view.settings_score.setOnClickListener {
             NavHostFragment.findNavController(this).navigate(ProfileFragmentDirections.actionNavigationProfileToReviewsFragment())
+        }
+        view.settings_usage.setOnClickListener {
+            NavHostFragment.findNavController(this).navigate(ProfileFragmentDirections.actionNavigationProfileToInvoiceFragment())
         }
     }
 
