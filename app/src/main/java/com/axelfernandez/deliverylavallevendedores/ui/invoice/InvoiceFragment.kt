@@ -11,6 +11,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.axelfernandez.deliverylavallevendedores.R
@@ -59,6 +60,7 @@ class InvoiceFragment : Fragment() {
     }
 
     fun onItemInvoiceClicked(invoice: Invoice) {
-
+        NavHostFragment.findNavController(this)
+            .navigate(InvoiceFragmentDirections.actionInvoiceFragmentToInvoiceDetailFragment(invoice))
     }
 }

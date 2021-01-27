@@ -210,6 +210,23 @@
         android:id="@+id/invoiceFragment"
         android:name="com.axelfernandez.deliverylavallevendedores.ui.invoice.InvoiceFragment"
         android:label="invoice_fragment"
-        tools:layout="@layout/invoice_fragment" />
+        tools:layout="@layout/invoice_fragment" >
+        <action
+            android:id="@+id/action_invoiceFragment_to_invoiceDetailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:destination="@id/invoiceDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/invoiceDetailFragment"
+        android:name="com.axelfernandez.deliverylavallevendedores.ui.invoiceDetail.InvoiceDetailFragment"
+        android:label="invoice_detail_fragment"
+        tools:layout="@layout/invoice_detail_fragment" >
+        <argument
+            android:name="invoice"
+            app:argType="com.axelfernandez.deliverylavallevendedores.models.Invoice" />
+    </fragment>
 
 </navigation>

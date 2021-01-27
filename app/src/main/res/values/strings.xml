@@ -84,6 +84,14 @@
     <string name="there_no_are_invoices">No hay periodos de Facturacion</string>
     <string name="come_back_later_invoices">Vuelve a principio de cada mes para verlo</string>
     <string name="period_label">Facturacion del periodo %s</string>
-
-
+    <string name="what_this_means">¿Que significa esto?</string>
+    <string name="steps">Metodos para pagar</string>
+    <string name="invoice_detail_period">Periodo de facturacion del %s</string>
+    <string name="invoice_detail_status">Estado del pedido: %s</string>
+    <string name="invoice_detail_mount">Monto: $ %s</string>
+    <string name="invoice_detail_meaning_pending">Significa que tenes abonar este monto. \n \n
+        Recuerda que tienes hasta el 10 de cada mes para abonar \n \n
+        No olvides enviar el comprobante para acreditar el pago</string>
+    <string name="invoice_detail_meaning_payed">Significa que tu pago ya fue revisado y aprobado, no hay nada que hacer aqui. ¡Gracias por tu pago!</string>
+    <string name="email_subject">Envio de comprobante de %s del periodo %s</string>
 </resources>

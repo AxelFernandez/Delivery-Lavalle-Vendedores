@@ -28,12 +28,12 @@ data class CompanyCategoryResponse(
     }
 }
 
-
+@Parcelize
 data class Invoice(
     val period : String,
     val mount : Float,
     val status : String,
     val dateCreated : String,
     val datePayed : String?
-)
+):Parcelable
 
