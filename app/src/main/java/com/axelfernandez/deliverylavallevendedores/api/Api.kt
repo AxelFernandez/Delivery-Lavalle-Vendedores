@@ -79,6 +79,12 @@ interface Api {
     @GET("hadPendingInvoices")
     fun hadPendingInvoices(@Header("Authorization") token: String):Call<Boolean>
 
+    @GET("company_availability")
+    fun getCompanyAvailability(@Header("Authorization") token: String):Call<Boolean>
+
+    @POST("company_availability")
+    fun postCompanyAvailability(@Header("Authorization") token: String,@Body availability: Boolean):Call<Boolean>
+
     @Multipart
     @POST("company")
     fun registryCompany(@Header("Authorization") token: String,

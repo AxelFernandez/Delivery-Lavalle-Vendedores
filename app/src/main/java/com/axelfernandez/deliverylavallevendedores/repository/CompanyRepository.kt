@@ -20,6 +20,7 @@ class CompanyRepository (
     val companyData = MutableLiveData<Company>()
     val invoices = MutableLiveData<List<Invoice>>()
     val pendingInvoices = MutableLiveData<Boolean>()
+    val availability = MutableLiveData<Boolean>()
 
     fun registerCompany(token: String,
                         file : MultipartBody.Part,
@@ -139,5 +140,36 @@ class CompanyRepository (
     }
     fun returnHadPendingInvoices(): LiveData<Boolean> {
         return pendingInvoices
+    }
+
+
+    fun getCompanyAvailability(token : String): MutableLiveData<Boolean>{
+        api.getCompanyAvailability("Bearer %s".format(token)).enqueue(object : Callback<Boolean>{
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                availability.value = null
+            }
+
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                availability.value = response.body()
+            }
+        })
+        return availability
+    }
+
+    fun postCompanyAvailability(token : String, available :Boolean): MutableLiveData<Boolean>{
+        api.postCompanyAvailability("Bearer %s".format(token), available).enqueue(object : Callback<Boolean>{
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                availability.value = null
+            }
+
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                availability.value = response.body()
+            }
+        })
+        return availability
+    }
+
+    fun returnAvailability(): LiveData<Boolean> {
+        return availability
     }
 }

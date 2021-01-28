@@ -7,72 +7,110 @@
     android:orientation="vertical"
     tools:context=".ui.home.HomeFragment">
 
-   <include layout="@layout/app_bar"/>
+    <include layout="@layout/app_bar" />
 
-   <com.axelfernandez.deliverylavallevendedores.component.TitleComponent
-       android:layout_height="wrap_content"
-       android:layout_marginStart="20dp"
-       android:layout_marginTop="10dp"
-       android:layout_width="wrap_content"
-       app:title="Pedidos Pendientes"/>
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-   <LinearLayout
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:background="@drawable/shape_border"
-       android:layout_margin="10dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-      <androidx.recyclerview.widget.RecyclerView
-          android:id="@+id/rv_pending"
-          android:layout_margin="10dp"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <com.axelfernandez.deliverylavallevendedores.component.TitleComponent
+                    android:id="@+id/label_availability"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    tools:title="Estas Abierto:" />
+
+                <com.bitvale.switcher.SwitcherX
+                    android:id="@+id/switcher"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:switcher_icon_color="@color/white"
+                    app:switcher_off_color="@color/redDark"
+                    app:switcher_on_color="@color/green" />
 
 
-   </LinearLayout>
+            </LinearLayout>
 
-   <com.axelfernandez.deliverylavallevendedores.component.TitleComponent
-       android:layout_height="wrap_content"
-       android:layout_marginStart="20dp"
-       android:layout_marginTop="10dp"
-       android:layout_width="wrap_content"
-       app:title="Pedidos En Proceso"/>
+            <com.axelfernandez.deliverylavallevendedores.component.TitleComponent
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                app:title="Pedidos Pendientes" />
 
-   <LinearLayout
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:background="@drawable/shape_border"
-       android:layout_margin="10dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/shape_border">
 
-      <androidx.recyclerview.widget.RecyclerView
-          android:id="@+id/rv_in_process"
-          android:layout_margin="10dp"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"/>
-   </LinearLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_pending"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp" />
 
-   <LinearLayout
-       android:id="@+id/button_orders_closed"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:background="@drawable/shape_border"
-       android:layout_marginStart="10dp"
-       android:layout_marginEnd="10dp"
-       android:paddingTop="10dp"
-       android:paddingBottom="10dp"
-       >
-      <com.axelfernandez.deliverylavallevendedores.component.TitleComponent
-          android:layout_height="wrap_content"
-          android:layout_width="wrap_content"
 
-          android:layout_weight="1"
-          android:layout_marginStart="20dp"
-          app:title="Pedidos Cerrados"/>
-      <ImageView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginRight="10dp"
-          android:src="@drawable/ic_baseline_arrow_forward_ios_24"/>
+            </LinearLayout>
 
-   </LinearLayout>
+            <com.axelfernandez.deliverylavallevendedores.component.TitleComponent
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                app:title="Pedidos En Proceso" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/shape_border">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_in_process"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/button_orders_closed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/shape_border"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp">
+
+                <com.axelfernandez.deliverylavallevendedores.component.TitleComponent
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginStart="20dp"
+                    android:layout_weight="1"
+                    app:title="Pedidos Cerrados" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_baseline_arrow_forward_ios_24" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
 </LinearLayout>

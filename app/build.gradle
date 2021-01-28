@@ -83,6 +83,7 @@ dependencies {
     implementation 'com.github.andremion:counterfab:1.2.2'
     implementation 'com.kofigyan.stateprogressbar:stateprogressbar:1.0.0'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    implementation 'com.bitvale:switcher:1.1.1'
 
 
     testImplementation 'junit:junit:4.12'

@@ -35,11 +35,23 @@ class HomeFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_home, container, false)
         pendingRv = root.findViewById(R.id.rv_pending) as RecyclerView
         progressrv = root.findViewById(R.id.rv_in_process) as RecyclerView
-
         val user = LoginUtils.getUserFromSharedPreferences(requireContext())
         homeViewModel.solicitPendingOrders(user.token)
         homeViewModel.solicitInProgressOrders(user.token)
+        homeViewModel.getAvailability(user.token)
 
+
+        homeViewModel.returnAvailability().observe(viewLifecycleOwner, Observer {
+            root.switcher.setChecked(it,true)
+            if (it){
+                root.label_availability.title = "Estas Abierto"
+            }else{
+                root.label_availability.title = "Has Cerrado"
+            }
+        })
+        root.switcher.setOnCheckedChangeListener {
+            homeViewModel.postAvailability(user.token, it)
+        }
         homeViewModel.returnPendingOrders().observe(viewLifecycleOwner, Observer {
             if(it == null){
                 ViewUtil.setSnackBar(root,R.color.red,getString(R.string.no_conection))
