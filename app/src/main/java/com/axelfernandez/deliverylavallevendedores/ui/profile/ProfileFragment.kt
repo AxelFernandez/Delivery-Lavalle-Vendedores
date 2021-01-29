@@ -70,6 +70,10 @@ class ProfileFragment : Fragment() {
         view.settings_usage.setOnClickListener {
             NavHostFragment.findNavController(this).navigate(ProfileFragmentDirections.actionNavigationProfileToInvoiceFragment())
         }
+        view.settings_logout.setOnClickListener {
+            LoginUtils.removeUserData(requireContext())
+            NavHostFragment.findNavController(this).navigate(ProfileFragmentDirections.actionNavigationProfileToLoginFragment2())
+        }
     }
 
 }
