@@ -5,6 +5,14 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('/Users/axelfernandez/Desktop/Vendedores/deliverylavallevendedores')
+            storePassword 'californica'
+            keyAlias 'vendedores'
+            keyPassword 'californica1'
+        }
+    }
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
 
@@ -12,8 +20,8 @@ android {
         applicationId "com.axelfernandez.deliverylavallevendedores"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
         buildConfigField "String", "hostname", '"https://deliverylavalle.com.ar"'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -30,11 +38,12 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField "String", "hostname", '"https://deliverylavalle.com.ar"'
+            signingConfig signingConfigs.release
 
         }
         local{
             initWith debug
-            buildConfigField "String", "hostname", '"http://192.168.0.13:8080"'
+            buildConfigField "String", "hostname", '"http://192.168.0.16:8080"'
         }
     }
 }

@@ -13,8 +13,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 class LoginViewModel : ViewModel() {
     private val loginRepository = LoginRepository(RetrofitFactory.buildService(Api::class.java))
 
-    fun loginGetToken(user: User){
-        loginRepository.getToken(user)
+    fun loginGetToken(userToken: String){
+        loginRepository.getToken(userToken)
     }
 
     fun returnToken(): LiveData<UserResponse> {

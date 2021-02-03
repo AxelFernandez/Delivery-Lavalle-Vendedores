@@ -19,8 +19,8 @@ class LoginRepository (
 ){
     val data = MutableLiveData<UserResponse>()
 
-     fun getToken(user: User): MutableLiveData<UserResponse> {
-        api.loginWithGoogle(user).enqueue(object : Callback<UserResponse> {
+     fun getToken(googleUserToken: String): MutableLiveData<UserResponse> {
+        api.loginWithGoogle(googleUserToken).enqueue(object : Callback<UserResponse> {
             override fun onFailure(call: Call<UserResponse>, t: Throwable) {
                 data.value = null
 

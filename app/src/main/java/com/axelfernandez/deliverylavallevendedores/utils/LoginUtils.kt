@@ -84,7 +84,10 @@ class LoginUtils {
             editor.clear().apply()
 
         }
-
+        fun saveSessionToken(token:String, context: Context){
+            val editor :SharedPreferences.Editor = context.getSharedPreferences("userSession", Context.MODE_PRIVATE).edit()
+            editor.putString("token", token).apply()
+        }
         fun setIsLoginReady(context: Context, status: Boolean){
             var editor :SharedPreferences.Editor = context.getSharedPreferences("userSession", Context.MODE_PRIVATE).edit()
             editor.putBoolean(context.getString(R.string.is_login_ready),status)

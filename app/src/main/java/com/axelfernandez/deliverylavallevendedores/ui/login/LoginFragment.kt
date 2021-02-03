@@ -52,7 +52,9 @@ class LoginFragment : Fragment() {
         val v =  inflater.inflate(R.layout.login_fragment, container, false)
 
         mGoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.token_client_id))
             .requestProfile()
+            .requestEmail()
             .build()
         mGoogleSignInClient = GoogleSignIn.getClient(activity?.application!!, mGoogleSignInOptions)
 
@@ -82,9 +84,8 @@ class LoginFragment : Fragment() {
             val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 val account = task.getResult(ApiException::class.java)!!
-                val user = viewModel.createUser(account)
-                viewModel.loginGetToken(user)
-
+                val googleToken = account.idToken?:return
+                viewModel.loginGetToken(googleToken)
                 viewModel.returnToken().observe(viewLifecycleOwner, Observer {
                     if (it == null) {
                         ViewUtil.setSnackBar(
@@ -92,32 +93,12 @@ class LoginFragment : Fragment() {
                             R.color.red,
                             getString(R.string.no_conection)
                         )
+                        return@Observer
                     }
-                    val it = it ?: return@Observer
-                    user.token = it.access_token
-                    LoginUtils.putUserToSharedPreferences(requireContext(), user)
+                    LoginUtils.putUserToSharedPreferences(requireContext(), it.user)
+                    LoginUtils.saveSessionToken(it.access_token,requireContext())
                     LoginUtils.setIsLoginReady(requireContext(),it.completeRegistry)
-                    FirebaseMessaging.getInstance().token.addOnCompleteListener(
-                        OnCompleteListener { task ->
-                            if (!task.isSuccessful) {
-                                Log.w(
-                                    "TAG",
-                                    "Fetching FCM registration token failed",
-                                    task.exception
-                                )
-                                return@OnCompleteListener
-                            }
-                            val token = task.result
-                            val editor =
-                                activity?.getSharedPreferences("userSession", Context.MODE_PRIVATE)
-                                    ?.edit() ?: return@OnCompleteListener
-                            editor.putString("token_firebase", token).apply()
-
-                            val user = LoginUtils.getUserFromSharedPreferences(requireContext())
-                            viewModel.sendFirebaseToken(user.token, FirebaseToken(token))
-
-                            //Toast.makeText(requireContext(), token, Toast.LENGTH_SHORT).show()
-                        })
+                    fetchFirebase()
                     if (it.is_new || !it.completeRegistry) {
                         findNavController(this).navigate(LoginFragmentDirections.actionLoginFragmentToMapsFragment(TypeOfView.ADD))
                     } else {
@@ -126,13 +107,32 @@ class LoginFragment : Fragment() {
                         startActivity(intent)
                         activity?.finish()
                     }
-
-
                 })
 
             } catch (e: ApiException) {
                 Log.e(TAG,e.message!!)
             }
         }
+    }
+
+    private fun fetchFirebase() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(
+            OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.w(
+                        "TAG",
+                        "Fetching FCM registration token failed",
+                        task.exception
+                    )
+                    return@OnCompleteListener
+                }
+                val token = task.result
+                val editor =
+                    activity?.getSharedPreferences("userSession", Context.MODE_PRIVATE)
+                        ?.edit() ?: return@OnCompleteListener
+                editor.putString("token_firebase", token).apply()
+                val user = LoginUtils.getUserFromSharedPreferences(requireContext())
+                viewModel.sendFirebaseToken(user.token, FirebaseToken(token))
+            })
     }
 }
