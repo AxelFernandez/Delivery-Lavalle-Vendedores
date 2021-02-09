@@ -95,4 +95,5 @@
     <string name="invoice_detail_meaning_payed">Significa que tu pago ya fue revisado y aprobado, no hay nada que hacer aqui. ¡Gracias por tu pago!</string>
     <string name="email_subject">Envio de comprobante de %s del periodo %s</string>
     <string name="token_client_id">53044701658-a7r3evgf1basgjbpu0cp9ifl9uugeu7j.apps.googleusercontent.com</string>
+    <string name="we_have_a_problem_sign_out">Tuvimos un problema al desloguarte, intenta de nuevo</string>
 </resources>

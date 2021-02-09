@@ -12,6 +12,10 @@ import androidx.navigation.fragment.NavHostFragment
 import com.axelfernandez.deliverylavallevendedores.R
 import com.axelfernandez.deliverylavallevendedores.utils.LoginUtils
 import com.axelfernandez.deliverylavallevendedores.utils.TypeOfView
+import com.axelfernandez.deliverylavallevendedores.utils.ViewUtil
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.android.synthetic.main.profile_fragment.view.*
 import kotlinx.android.synthetic.main.reviews_fragment.view.*
 
@@ -71,8 +75,19 @@ class ProfileFragment : Fragment() {
             NavHostFragment.findNavController(this).navigate(ProfileFragmentDirections.actionNavigationProfileToInvoiceFragment())
         }
         view.settings_logout.setOnClickListener {
-            LoginUtils.removeUserData(requireContext())
-            NavHostFragment.findNavController(this).navigate(ProfileFragmentDirections.actionNavigationProfileToLoginFragment2())
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.token_client_id))
+                .requestEmail()
+                .requestProfile()
+                .build()
+            val googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
+            googleSignInClient.signOut().addOnSuccessListener {
+              LoginUtils.removeUserData(requireContext())
+                NavHostFragment.findNavController(this).navigate(ProfileFragmentDirections.actionNavigationProfileToLoginFragment2())
+            }.addOnFailureListener {
+                ViewUtil.setSnackBar(requireView(),R.color.orange,getString(R.string.we_have_a_problem_sign_out))
+                FirebaseCrashlytics.getInstance().recordException(it)
+            }
         }
     }
 
