@@ -1,5 +1,6 @@
 package com.axelfernandez.deliverylavallevendedores.ui.addCategory
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.axelfernandez.deliverylavallevendedores.api.Api
@@ -10,10 +11,15 @@ import com.axelfernandez.deliverylavallevendedores.repository.ProductRepository
 
 class AddCategoryViewModel : ViewModel() {
 
-    private val productRepository = ProductRepository(RetrofitFactory.buildService(Api::class.java))
+    private lateinit var productRepository: ProductRepository
 
-    fun postNewCategory(token: String, categoryRequest: ProductCategoryRequest){
-        productRepository.postNewProductCategory(token, categoryRequest)
+    fun getRepository(context: Context) {
+        productRepository =
+            ProductRepository(RetrofitFactory.buildService(Api::class.java, context))
+    }
+
+    fun postNewCategory(categoryRequest: ProductCategoryRequest) {
+        productRepository.postNewProductCategory(categoryRequest)
     }
 
 

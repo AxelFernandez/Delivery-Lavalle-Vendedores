@@ -20,8 +20,10 @@ import java.io.File
 
 class AddProductViewModel : ViewModel() {
 
-    private val productRepository = ProductRepository(RetrofitFactory.buildService(Api::class.java))
-
+    private lateinit var productRepository :ProductRepository
+    fun getRepository(context: Context) {
+        productRepository = ProductRepository(RetrofitFactory.buildService(Api::class.java,context))
+    }
     fun validateFields(view: View, context: Context):Boolean{
         var result = false
         view.add_name_product_field.text.isNullOrEmpty().let {
@@ -45,19 +47,19 @@ class AddProductViewModel : ViewModel() {
         return result
     }
 
-    fun requestCategory(token :String){
-        productRepository.solicitProductCategory(token)
+    fun requestCategory(){
+        productRepository.solicitProductCategory()
     }
 
     fun returnProductsCategory(): LiveData<List<ProductCategory>> {
         return productRepository.returnProductCategory()
     }
-    fun updateProduct(token: String, product: Product){
-        productRepository.updateProduct(token, product)
+    fun updateProduct(product: Product){
+        productRepository.updateProduct(product)
     }
 
 
-    fun addNewProduct(token: String, product: Product, file : File, typeOfView: String){
+    fun addNewProduct(product: Product, file : File, typeOfView: String){
         val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
         val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
         val name = MultipartBody.Part.createFormData("name", product.name, requestFile)
@@ -67,7 +69,7 @@ class AddProductViewModel : ViewModel() {
         val category = MultipartBody.Part.createFormData("category", product.category, requestFile)
         val typeOfView = MultipartBody.Part.createFormData("type", typeOfView, requestFile)
         val id = MultipartBody.Part.createFormData("id", product.id, requestFile)
-        productRepository.addProduct(token, body,name,description,price, category,availableNow,typeOfView,id)
+        productRepository.addProduct(body,name,description,price, category,availableNow,typeOfView,id)
     }
 
     fun confirmProductAdded(): LiveData<String> {

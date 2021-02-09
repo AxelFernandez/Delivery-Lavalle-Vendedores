@@ -1,5 +1,6 @@
 package com.axelfernandez.deliverylavallevendedores.ui.login
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.axelfernandez.deliverylavallevendedores.api.Api
@@ -11,8 +12,11 @@ import com.axelfernandez.deliverylavallevendedores.repository.LoginRepository
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 
 class LoginViewModel : ViewModel() {
-    private val loginRepository = LoginRepository(RetrofitFactory.buildService(Api::class.java))
+    private lateinit var loginRepository :LoginRepository
 
+    fun getRepository(context: Context) {
+        loginRepository  = LoginRepository(RetrofitFactory.buildService(Api::class.java, context))
+    }
     fun loginGetToken(userToken: String){
         loginRepository.getToken(userToken)
     }
@@ -33,9 +37,8 @@ class LoginViewModel : ViewModel() {
         )
     }
 
-    fun sendFirebaseToken(token: String, firebaseToken: FirebaseToken) {
-        loginRepository.sendToken(token, firebaseToken)
+    fun sendFirebaseToken(firebaseToken: FirebaseToken) {
+        loginRepository.sendToken(firebaseToken)
 
     }
-    // TODO: Implement the ViewModel
 }

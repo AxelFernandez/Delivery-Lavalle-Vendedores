@@ -14,80 +14,80 @@ interface Api {
     fun loginWithGoogle(@Body googleUserToken: String):Call<UserResponse>
 
     @POST("firebase_token")
-    fun sendFirebaseToken(@Body firebaseToken: FirebaseToken, @Header("Authorization") token: String):Call<ConfirmationObject>
+    fun sendFirebaseToken(@Body firebaseToken: FirebaseToken):Call<ConfirmationObject>
 
     @GET("company_category")
-    fun getCompanyCategories(@Header("Authorization") token: String):Call<List<CompanyCategoryResponse>>
+    fun getCompanyCategories():Call<List<CompanyCategoryResponse>>
 
     @GET("product_category")
-    fun getProductCategory(@Header("Authorization") token: String):Call<List<ProductCategory>>
+    fun getProductCategory():Call<List<ProductCategory>>
 
     @POST("product_category")
-    fun postProductCategory(@Body categoryRequest: ProductCategoryRequest, @Header("Authorization") token: String):Call<List<ProductCategory>>
+    fun postProductCategory(@Body categoryRequest: ProductCategoryRequest):Call<List<ProductCategory>>
 
     @GET("product")
-    fun getProducts(@Header("Authorization") token: String):Call<List<Product>>
+    fun getProducts():Call<List<Product>>
 
     @POST("product")
-    fun updateProduct( @Body product:Product, @Header("Authorization") token: String):Call<String>
+    fun updateProduct(@Body product:Product):Call<String>
 
     @POST("product_delete")
-    fun deleteProduct( @Body product:Product, @Header("Authorization") token: String):Call<String>
+    fun deleteProduct(@Body product:Product):Call<String>
 
     @POST("product_category_delete")
-    fun deleteProductCategory(@Body categoryRequest: ProductCategoryRequest, @Header("Authorization") token: String):Call<String>
+    fun deleteProductCategory(@Body categoryRequest: ProductCategoryRequest):Call<String>
 
     @GET("order_pending")
-    fun getOrdersPending(@Header("Authorization") token: String):Call<List<Order>>
+    fun getOrdersPending():Call<List<Order>>
 
     @GET("order_in_progress")
-    fun getOrdersInProgress(@Header("Authorization") token: String):Call<List<Order>>
+    fun getOrdersInProgress():Call<List<Order>>
 
     @GET("order_closed")
-    fun getOrdersClosed(@Header("Authorization") token: String):Call<List<Order>>
+    fun getOrdersClosed():Call<List<Order>>
 
     @POST("order_by_id")
-    fun getOrderById(@Body id:String, @Header("Authorization") token: String):Call<Order>
+    fun getOrderById(@Body id:String):Call<Order>
 
     @POST("next_state")
-    fun setOrderInNextState(@Body id:String, @Header("Authorization") token: String):Call<Order>
+    fun setOrderInNextState(@Body id:String):Call<Order>
 
     @POST("cancel")
-    fun cancelOrder(@Body id:String, @Header("Authorization") token: String):Call<Order>
+    fun cancelOrder(@Body id:String):Call<Order>
 
     @GET("company")
-    fun getCompany(@Header("Authorization") token: String):Call<Company>
+    fun getCompany():Call<Company>
 
     @POST("company")
-    fun registryCompanyNoImage(@Header("Authorization") token: String, @Body company : Company):Call<String>
+    fun registryCompanyNoImage(@Body company : Company):Call<String>
 
     @GET("account_debit")
-    fun getAccountDebit(@Header("Authorization") token: String):Call<String>
+    fun getAccountDebit():Call<String>
 
     @GET("reviews")
-    fun getReviews(@Header("Authorization") token: String, @Query("company") clientId:String):Call<List<Review>>
+    fun getReviews(@Query("company") clientId:String):Call<List<Review>>
 
     @POST("getMeliLink")
-    fun getMeLiLink(@Header("Authorization") token: String, @Body orderId: String):Call<MeliLink>
+    fun getMeLiLink(@Body orderId: String):Call<MeliLink>
 
     @POST("sendMeliLink")
-    fun sendMeLiLink(@Header("Authorization") token: String, @Body link: MeliLink):Call<String>
+    fun sendMeLiLink(@Body link: MeliLink):Call<String>
 
     @GET("invoices")
-    fun getInvoices(@Header("Authorization") token: String):Call<List<Invoice>>
+    fun getInvoices():Call<List<Invoice>>
 
     @GET("hadPendingInvoices")
-    fun hadPendingInvoices(@Header("Authorization") token: String):Call<Boolean>
+    fun hadPendingInvoices():Call<Boolean>
 
     @GET("company_availability")
-    fun getCompanyAvailability(@Header("Authorization") token: String):Call<Boolean>
+    fun getCompanyAvailability():Call<Boolean>
 
     @POST("company_availability")
-    fun postCompanyAvailability(@Header("Authorization") token: String,@Body availability: Boolean):Call<Boolean>
+    fun postCompanyAvailability(@Body availability: Boolean):Call<Boolean>
 
     @Multipart
     @POST("company")
-    fun registryCompany(@Header("Authorization") token: String,
+    fun registryCompany(
                         @Part file: MultipartBody.Part,
                         @Part name : MultipartBody.Part,
                         @Part description : MultipartBody.Part,
@@ -102,7 +102,7 @@ interface Api {
 
     @Multipart
     @POST("product")
-    fun addProduct(@Header("Authorization") token: String,
+    fun addProduct(
                         @Part file: MultipartBody.Part,
                         @Part name : MultipartBody.Part,
                         @Part description : MultipartBody.Part,

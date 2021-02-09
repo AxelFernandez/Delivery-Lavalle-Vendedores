@@ -45,15 +45,15 @@ class OrderDetail : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(OrderDetailViewModel::class.java)
+        viewModel.getRepository(requireContext())
         val arguments =  arguments?:return
         val view = view?:return
-        val user = LoginUtils.getUserFromSharedPreferences(requireContext())
         val toolbar = view.findViewById(R.id.toolbar) as Toolbar
         toolbar.setNavigationIcon(R.drawable.ic_back_button)
         toolbar.setNavigationOnClickListener(View.OnClickListener { requireActivity().onBackPressed() })
         val order: Order = OrderDetailArgs.fromBundle(arguments).argumentOrder
         viewModel.bind(order,view,requireContext())
-        viewModel.fetchOrder(order.id, user.token)
+        viewModel.fetchOrder(order.id)
         viewModel.returnDataAndBuild().observe(viewLifecycleOwner, Observer {
             viewModel.bind(order,view,requireContext())
         })
@@ -68,10 +68,10 @@ class OrderDetail : Fragment() {
             checkPhonePermissions(requireActivity(),order)
         }
         view.detail_order_changeState.setOnClickListener {
-            viewModel.setNewState(order.id, user.token)
+            viewModel.setNewState(order.id)
         }
         view.detail_order_cancel_order.setOnClickListener {
-            viewModel.cancelOrder(order.id, user.token)
+            viewModel.cancelOrder(order.id)
         }
         view.detail_order_meli_link.setOnClickListener {
             NavHostFragment.findNavController(this).navigate(OrderDetailDirections.actionOrderDetailToMeliLinkFragment(order.id))

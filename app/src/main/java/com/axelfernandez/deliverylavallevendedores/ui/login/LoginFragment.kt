@@ -34,6 +34,7 @@ import kotlinx.android.synthetic.main.login_fragment.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.Exception
 
 class LoginFragment : Fragment() {
     val RC_SIGN_IN: Int = 1
@@ -50,7 +51,6 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val v =  inflater.inflate(R.layout.login_fragment, container, false)
-
         mGoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.token_client_id))
             .requestProfile()
@@ -75,11 +75,10 @@ class LoginFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
-        // TODO: Use the ViewModel
+        viewModel.getRepository(requireContext())
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        val view = view ?: return
         if (requestCode == RC_SIGN_IN) {
             val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
@@ -131,8 +130,7 @@ class LoginFragment : Fragment() {
                     activity?.getSharedPreferences("userSession", Context.MODE_PRIVATE)
                         ?.edit() ?: return@OnCompleteListener
                 editor.putString("token_firebase", token).apply()
-                val user = LoginUtils.getUserFromSharedPreferences(requireContext())
-                viewModel.sendFirebaseToken(user.token, FirebaseToken(token))
+                viewModel.sendFirebaseToken(FirebaseToken(token))
             })
     }
 }

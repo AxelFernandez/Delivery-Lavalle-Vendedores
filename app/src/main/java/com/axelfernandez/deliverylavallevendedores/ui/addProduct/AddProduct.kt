@@ -50,7 +50,7 @@ class AddProduct : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(AddProductViewModel::class.java)
-        val user = LoginUtils.getUserFromSharedPreferences(requireContext())
+        viewModel.getRepository(requireContext())
         val view = view?:return
         val arguments = arguments?:return
         val args = AddProductArgs.fromBundle(arguments)
@@ -59,7 +59,7 @@ class AddProduct : Fragment() {
         view.available_now.textOn = "Si"
         view.available_now.textOff = "No"
         view.available_now.isChecked = true
-        viewModel.requestCategory(user.token)
+        viewModel.requestCategory()
         viewModel.returnProductsCategory().observe(viewLifecycleOwner, Observer {
             if(it == null){
                 Toast.makeText(requireContext(),getString(R.string.no_conection),
@@ -102,9 +102,9 @@ class AddProduct : Fragment() {
                product.id = args.product?.id
             }
             if (isPhotoSelected){
-                viewModel.addNewProduct(user.token,product,photoSelected,type.value)
+                viewModel.addNewProduct(product,photoSelected,type.value)
             }else{
-                viewModel.updateProduct(user.token,product)
+                viewModel.updateProduct(product)
             }
 
         }

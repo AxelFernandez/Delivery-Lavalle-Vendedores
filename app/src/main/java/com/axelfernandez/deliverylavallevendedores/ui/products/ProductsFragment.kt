@@ -29,7 +29,6 @@ import kotlinx.android.synthetic.main.fragment_products.view.*
 class ProductsFragment : Fragment() {
 
     private lateinit var productsViewModel: ProductsViewModel
-    private lateinit var user: User
     private lateinit var productRv: RecyclerView
 
 
@@ -40,13 +39,13 @@ class ProductsFragment : Fragment() {
     ): View? {
         productsViewModel =
             ViewModelProviders.of(this).get(ProductsViewModel::class.java)
+        productsViewModel.getRepository(requireContext())
         val root = inflater.inflate(R.layout.fragment_products, container, false)
         var hadNoCategories : Boolean = false
-        user =  LoginUtils.getUserFromSharedPreferences(requireContext())
         productRv = root.findViewById(R.id.products_rv) as RecyclerView
 
-        productsViewModel.solicitProduct(user.token)
-        productsViewModel.getCategories(user.token)
+        productsViewModel.solicitProduct()
+        productsViewModel.getCategories()
 
 
         productsViewModel.returnCategories().observe(viewLifecycleOwner, Observer {
@@ -71,7 +70,7 @@ class ProductsFragment : Fragment() {
                 return@Observer
             }
             ViewUtil.setSnackBar(root,R.color.green, getString(R.string.deleted))
-            productsViewModel.solicitProduct(user.token)
+            productsViewModel.solicitProduct()
         })
         root.product_add.setOnClickListener {
             if (hadNoCategories){
@@ -87,6 +86,6 @@ class ProductsFragment : Fragment() {
 
     }
     private fun onDeleteSelected(product: Product){
-        productsViewModel.deleteProduct(user.token,product)
+        productsViewModel.deleteProduct(product)
     }
 }

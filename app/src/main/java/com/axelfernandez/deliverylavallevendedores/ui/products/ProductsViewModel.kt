@@ -1,5 +1,6 @@
 package com.axelfernandez.deliverylavallevendedores.ui.products
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,22 +12,26 @@ import com.axelfernandez.deliverylavallevendedores.repository.ProductRepository
 
 class ProductsViewModel : ViewModel() {
 
-    private val productRepository = ProductRepository(RetrofitFactory.buildService(Api::class.java))
+    private lateinit var productRepository : ProductRepository
 
-    fun solicitProduct(token:String){
-        productRepository.getProducts(token)
+    fun getRepository(context: Context) {
+        productRepository = ProductRepository(RetrofitFactory.buildService(Api::class.java, context))
+    }
+
+    fun solicitProduct(){
+        productRepository.getProducts()
     }
     fun returnProducts(): LiveData<List<Product>> {
         return productRepository.returnProducts()
     }
-    fun deleteProduct(token: String, product: Product){
-        productRepository.deleteProduct(token, product)
+    fun deleteProduct(product: Product){
+        productRepository.deleteProduct(product)
     }
     fun returnConfirmDeleted(): LiveData<String> {
         return productRepository.returnConfirmationProductAdded()
     }
-    fun getCategories(token: String){
-        productRepository.solicitProductCategory(token)
+    fun getCategories(){
+        productRepository.solicitProductCategory()
     }
     fun returnCategories(): LiveData<List<ProductCategory>> {
         return productRepository.returnProductCategory()

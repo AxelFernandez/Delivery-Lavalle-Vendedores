@@ -39,13 +39,13 @@ class ClosedOrders : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(ClosedOrdersViewModel::class.java)
+        viewModel.getRepository(requireContext())
         val v = view?:return
         closedRv = v.findViewById(R.id.closed_orders_rv) as RecyclerView
         val toolbar = v.findViewById(R.id.toolbar) as Toolbar
         toolbar.setNavigationIcon(R.drawable.ic_back_button)
         toolbar.setNavigationOnClickListener(View.OnClickListener { requireActivity().onBackPressed() })
-        val user : User = LoginUtils.getUserFromSharedPreferences(requireContext())
-        viewModel.solicitClosedOrders(user.token)
+        viewModel.solicitClosedOrders()
         viewModel.returnClosedPending().observe(viewLifecycleOwner, Observer {
             if (it == null){
                 view?.closed_orders_empty?.isVisible = true

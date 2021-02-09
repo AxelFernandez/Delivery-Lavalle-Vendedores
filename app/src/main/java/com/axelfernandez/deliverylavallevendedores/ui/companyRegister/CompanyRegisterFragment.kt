@@ -50,14 +50,14 @@ class CompanyRegisterFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(CompanyRegisterViewModel::class.java)
-        val user = LoginUtils.getUserFromSharedPreferences(requireContext())
+        viewModel.getRepository(requireContext())
         val view = view?:return
         val arguments = arguments?:return
         val type = CompanyRegisterFragmentArgs.fromBundle(arguments).type
         view.available_now.textOn = "Si"
         view.available_now.textOff = "No"
         view.available_now.isChecked = true
-        viewModel.requestCategories(user.token)
+        viewModel.requestCategories()
         viewModel.returnCategories().observe(viewLifecycleOwner, Observer {
             if(it == null){
                 Toast.makeText(requireContext(),getString(R.string.no_conection),
@@ -80,7 +80,7 @@ class CompanyRegisterFragment : Fragment() {
         if(type == TypeOfView.EDIT){
             val company = LoginUtils.getDefaultCompany(requireContext())
             viewModel.bind(view, requireContext(),company)
-            viewModel.getCompanyData(user.token)
+            viewModel.getCompanyData()
         }
         viewModel.returnData().observe(viewLifecycleOwner, Observer {
             viewModel.bind(view,requireContext(),it)
@@ -100,9 +100,9 @@ class CompanyRegisterFragment : Fragment() {
             val limits = arguments.getString(getString(R.string.arguments_limits))?:return@setOnClickListener
             company = viewModel.buildCompany(view,requireContext(),limits)
             if(!isPhotoSelected){
-                viewModel.registryCompanyNoImage(user.token,company)
+                viewModel.registryCompanyNoImage(company)
             }else{
-                viewModel.registryCompany(user.token, company, photoSelected, limits)
+                viewModel.registryCompany(company, photoSelected, limits)
             }
             view.progress_bar_registry.isVisible = true
         }

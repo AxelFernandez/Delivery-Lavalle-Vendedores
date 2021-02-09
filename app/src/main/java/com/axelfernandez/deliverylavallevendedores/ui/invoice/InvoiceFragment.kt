@@ -39,8 +39,8 @@ class InvoiceFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         val v = view ?: return
         viewModel = ViewModelProvider(this).get(InvoiceViewModel::class.java)
-        val user = LoginUtils.getUserFromSharedPreferences(requireContext())
-        viewModel.getInvoices(user.token)
+        viewModel.getRepository(requireContext())
+        viewModel.getInvoices()
         val toolbar = v.findViewById(R.id.toolbar) as Toolbar
         toolbar.setNavigationIcon(R.drawable.ic_back_button)
         toolbar.setNavigationOnClickListener(View.OnClickListener { requireActivity().onBackPressed() })

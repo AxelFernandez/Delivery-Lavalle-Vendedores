@@ -33,9 +33,9 @@ class AddCategory : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(AddCategoryViewModel::class.java)
+        viewModel.getRepository(requireContext())
         val view = view?:return
         val field : EditText = view.findViewById(R.id.add_category_field)
-        val user = LoginUtils.getUserFromSharedPreferences(requireContext())
         val arguments = arguments?:return
         val typeOff = AddCategoryArgs.fromBundle(arguments).Type
         val description = AddCategoryArgs.fromBundle(arguments).description
@@ -55,7 +55,7 @@ class AddCategory : Fragment() {
                 view.add_title_category.error = getString(R.string.required)
             }else{
                 categoryRequest.description = field.text.toString()
-                viewModel.postNewCategory(user.token, categoryRequest)
+                viewModel.postNewCategory(categoryRequest)
             }
         }
     }

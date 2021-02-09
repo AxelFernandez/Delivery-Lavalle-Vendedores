@@ -1,5 +1,6 @@
 package com.axelfernandez.deliverylavallevendedores.ui.reviews
 
+import android.content.Context
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -12,7 +13,11 @@ import kotlinx.android.synthetic.main.reviews_fragment.view.*
 
 class ReviewsViewModel : ViewModel() {
 
-	private val orderRepository = OrderRepository(RetrofitFactory.buildService(Api::class.java))
+	private lateinit var orderRepository :OrderRepository
+
+	fun getRepository(context: Context) {
+		orderRepository = OrderRepository(RetrofitFactory.buildService(Api::class.java, context))
+	}
 
 	fun bind(view : View, company: Company){
 		view.company_rating.text = company.rating.toString()
@@ -20,8 +25,8 @@ class ReviewsViewModel : ViewModel() {
 
 	}
 
-	fun getReviews(token:String, idCompany:String){
-		orderRepository.getReviews(token, idCompany)
+	fun getReviews( idCompany:String){
+		orderRepository.getReviews(idCompany)
 	}
 
 	fun returnReviews(): LiveData<List<Review>> {

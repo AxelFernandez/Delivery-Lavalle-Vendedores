@@ -19,21 +19,25 @@ import kotlinx.android.synthetic.main.order_detail_fragment.view.*
 
 class OrderDetailViewModel : ViewModel() {
 
-    private val orderRepository = OrderRepository(RetrofitFactory.buildService(Api::class.java))
+    private lateinit var orderRepository :OrderRepository
 
-    fun fetchOrder(orderId: String, token: String){
-        orderRepository.solicitOrderById(orderId,token)
+    fun getRepository(context: Context) {
+        orderRepository = OrderRepository(RetrofitFactory.buildService(Api::class.java, context))
+    }
+
+    fun fetchOrder(orderId: String){
+        orderRepository.solicitOrderById(orderId)
     }
 
     fun returnDataAndBuild(): LiveData<Order> {
         return orderRepository.returnOrderById()
     }
 
-    fun setNewState(orderId: String, token: String){
-        orderRepository.solicitSetNewState(orderId,token)
+    fun setNewState(orderId: String){
+        orderRepository.solicitSetNewState(orderId)
     }
-    fun cancelOrder(orderId: String, token: String){
-        orderRepository.cancelOrder(orderId,token)
+    fun cancelOrder(orderId: String){
+        orderRepository.cancelOrder(orderId)
     }
     fun returnNewState(): LiveData<Order> {
         return orderRepository.returnNewStateOrder()

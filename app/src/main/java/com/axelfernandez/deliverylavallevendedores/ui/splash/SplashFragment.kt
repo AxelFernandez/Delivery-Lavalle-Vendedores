@@ -33,7 +33,6 @@ class SplashFragment : Fragment() {
     }
 
     private lateinit var viewModel: SplashViewModel
-    val login = LoginRepository(RetrofitFactory.buildService(Api::class.java))
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,6 +44,7 @@ class SplashFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(SplashViewModel::class.java)
+        viewModel.getRepository(requireContext())
         val isLoginReady = LoginUtils.getIsLoginReady(requireContext())
         var remoteConfig = Firebase.remoteConfig
         val configSettings = remoteConfigSettings {
@@ -62,11 +62,11 @@ class SplashFragment : Fragment() {
                     val googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
                     googleSignInClient.silentSignIn().addOnCompleteListener {
                         val account: GoogleSignInAccount? = it.result
-                        login.getToken(account?.idToken ?: return@addOnCompleteListener)
+                        viewModel.loginGoogle(account?:return@addOnCompleteListener)
                     }.addOnFailureListener {
                         findNavController(this).navigate(SplashFragmentDirections.actionSplashFragmentToLoginFragment())
                     }
-                    login.returnData().observe(viewLifecycleOwner, Observer {
+                    viewModel.returnData().observe(viewLifecycleOwner, Observer {
                         if (it == null) {
                             Toast.makeText(
                                 requireContext(),

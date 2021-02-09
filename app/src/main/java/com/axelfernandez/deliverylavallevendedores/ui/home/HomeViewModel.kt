@@ -1,5 +1,6 @@
 package com.axelfernandez.deliverylavallevendedores.ui.home
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.axelfernandez.deliverylavallevendedores.api.Api
@@ -11,32 +12,36 @@ import com.axelfernandez.deliverylavallevendedores.repository.OrderRepository
 
 class HomeViewModel : ViewModel() {
 
-    private val orderRepository = OrderRepository(RetrofitFactory.buildService(Api::class.java))
-    private val companyRepository = CompanyRepository(RetrofitFactory.buildService(Api::class.java))
+    private lateinit var orderRepository :OrderRepository
+    private lateinit var companyRepository :CompanyRepository
 
+    fun getRepository(context: Context) {
+        orderRepository  = OrderRepository(RetrofitFactory.buildService(Api::class.java,context))
+        companyRepository = CompanyRepository(RetrofitFactory.buildService(Api::class.java, context))
+    }
 
-    fun solicitPendingOrders(token: String) {
-        orderRepository.solicitOrderPending(token)
+    fun solicitPendingOrders() {
+        orderRepository.solicitOrderPending()
     }
 
     fun returnPendingOrders(): LiveData<List<Order>> {
         return orderRepository.returnOrdersPending()
     }
 
-    fun solicitInProgressOrders(token: String) {
-        orderRepository.solicitOrderInProgress(token)
+    fun solicitInProgressOrders() {
+        orderRepository.solicitOrderInProgress()
     }
 
     fun returnInProgressOrders(): LiveData<List<Order>> {
         return orderRepository.returnOrdersInProgress()
     }
 
-    fun getAvailability(token: String) {
-        companyRepository.getCompanyAvailability(token)
+    fun getAvailability() {
+        companyRepository.getCompanyAvailability()
     }
 
-    fun postAvailability(token: String, available: Boolean) {
-        companyRepository.postCompanyAvailability(token, available)
+    fun postAvailability(available: Boolean) {
+        companyRepository.postCompanyAvailability(available)
     }
 
     fun returnAvailability(): LiveData<Boolean> {

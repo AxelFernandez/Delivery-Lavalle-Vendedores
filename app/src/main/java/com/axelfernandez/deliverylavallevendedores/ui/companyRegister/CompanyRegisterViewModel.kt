@@ -27,9 +27,13 @@ import java.io.File
 
 class CompanyRegisterViewModel : ViewModel() {
 
-    private val companyCategoryRepository = CompanyCategoryRepository(RetrofitFactory.buildService(Api::class.java))
-    private val companyRepository = CompanyRepository(RetrofitFactory.buildService(Api::class.java))
+    private lateinit var companyCategoryRepository :CompanyCategoryRepository
+    private lateinit var companyRepository :CompanyRepository
 
+    fun getRepository(context: Context) {
+        companyCategoryRepository = CompanyCategoryRepository(RetrofitFactory.buildService(Api::class.java,context))
+        companyRepository = CompanyRepository(RetrofitFactory.buildService(Api::class.java, context))
+    }
     fun validateFields(view: View, context: Context):Boolean{
         var result = false
         view.name.text.isNullOrEmpty().let {
@@ -69,15 +73,15 @@ class CompanyRegisterViewModel : ViewModel() {
         return result
     }
 
-    fun requestCategories(token : String){
-        companyCategoryRepository.getCompanyCategory(token)
+    fun requestCategories(){
+        companyCategoryRepository.getCompanyCategory()
     }
 
     fun returnCategories():LiveData<List<CompanyCategoryResponse>>{
        return companyCategoryRepository.returnData()
     }
 
-    fun registryCompany(token : String, company: Company,file : File, limits:String){
+    fun registryCompany(company: Company,file : File, limits:String){
         val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
         val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
         val name = MultipartBody.Part.createFormData("name", company.name, requestFile)
@@ -90,7 +94,7 @@ class CompanyRegisterViewModel : ViewModel() {
         val category = MultipartBody.Part.createFormData("category", company.category, requestFile)
         val limit = MultipartBody.Part.createFormData("limits", limits, requestFile)
 
-        companyRepository.registerCompany(token, body,name,description,phone,address,paymentMethod,deliveryMethod,category,limit,availableNow)
+        companyRepository.registerCompany(body,name,description,phone,address,paymentMethod,deliveryMethod,category,limit,availableNow)
     }
     fun returnCompanyRegistry(): LiveData<String> {
         return companyRepository.returnData()
@@ -120,8 +124,8 @@ class CompanyRegisterViewModel : ViewModel() {
 
     }
 
-    fun registryCompanyNoImage(token: String,company: Company){
-        companyRepository.registerCompanyNoImage(token,company)
+    fun registryCompanyNoImage(company: Company){
+        companyRepository.registerCompanyNoImage(company)
     }
 
     fun bind(view : View, context: Context, company: Company){
@@ -151,8 +155,8 @@ class CompanyRegisterViewModel : ViewModel() {
         }
     }
 
-    fun getCompanyData(token:String){
-        companyRepository.getCompanyData(token)
+    fun getCompanyData(){
+        companyRepository.getCompanyFullData()
     }
 
     fun returnData(): LiveData<Company> {

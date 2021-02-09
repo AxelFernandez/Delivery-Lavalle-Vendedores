@@ -23,8 +23,8 @@ class ProductRepository(private val api : Api){
     val dataProduct = MutableLiveData<List<Product>>()
     val dataDeleted = MutableLiveData<String>()
 
-    fun solicitProductCategory(token: String): MutableLiveData<List<ProductCategory>> {
-        api.getProductCategory("Bearer %s".format(token)).enqueue(object :
+    fun solicitProductCategory(): MutableLiveData<List<ProductCategory>> {
+        api.getProductCategory().enqueue(object :
             Callback<List<ProductCategory>> {
             override fun onFailure(call: Call<List<ProductCategory>>, t: Throwable) {
                 dataCategory.value = null
@@ -36,8 +36,8 @@ class ProductRepository(private val api : Api){
         return dataCategory
     }
 
-    fun postNewProductCategory(token: String, categoryRequest: ProductCategoryRequest): MutableLiveData<List<ProductCategory>>{
-        api.postProductCategory(categoryRequest, "Bearer %s".format(token)).enqueue(object :
+    fun postNewProductCategory(categoryRequest: ProductCategoryRequest): MutableLiveData<List<ProductCategory>>{
+        api.postProductCategory(categoryRequest).enqueue(object :
             Callback<List<ProductCategory>> {
             override fun onFailure(call: Call<List<ProductCategory>>, t: Throwable) {
                 dataCategory.value = null
@@ -52,8 +52,8 @@ class ProductRepository(private val api : Api){
         return dataCategory
     }
 
-    fun deleteNewProductCategory(token: String, categoryRequest: ProductCategoryRequest): MutableLiveData<String>{
-        api.deleteProductCategory(categoryRequest, "Bearer %s".format(token)).enqueue(object :
+    fun deleteNewProductCategory(categoryRequest: ProductCategoryRequest): MutableLiveData<String>{
+        api.deleteProductCategory(categoryRequest).enqueue(object :
             Callback<String> {
             override fun onFailure(call: Call<String>, t: Throwable) {
                 dataDeleted.value = null
@@ -73,8 +73,8 @@ class ProductRepository(private val api : Api){
     fun returnProductDeleted(): LiveData<String> {
         return dataDeleted
     }
-    fun getProducts(token: String): MutableLiveData<List<Product>>{
-        api.getProducts("Bearer %s".format(token)).enqueue(object :
+    fun getProducts(): MutableLiveData<List<Product>>{
+        api.getProducts().enqueue(object :
             Callback<List<Product>> {
             override fun onFailure(call: Call<List<Product>>, t: Throwable) {
                 dataProduct.value = null
@@ -92,7 +92,7 @@ class ProductRepository(private val api : Api){
 
     val data = MutableLiveData<String>()
 
-    fun addProduct(token: String,
+    fun addProduct(
                         file : MultipartBody.Part,
                         name : MultipartBody.Part,
                         description : MultipartBody.Part,
@@ -104,7 +104,7 @@ class ProductRepository(private val api : Api){
 
 
     ): MutableLiveData<String> {
-        api.addProduct("Bearer %s".format(token),file,name,description,price, category, availableNow, typeOfView,id).enqueue(object :Callback<String>{
+        api.addProduct(file,name,description,price, category, availableNow, typeOfView,id).enqueue(object :Callback<String>{
 
             override fun onFailure(call: Call<String>, t: Throwable) {
                 data.value= null
@@ -122,8 +122,8 @@ class ProductRepository(private val api : Api){
         return data
     }
 
-    fun updateProduct(token:String, product: Product): MutableLiveData<String> {
-        api.updateProduct(product,"Bearer %s".format(token)).enqueue(object : Callback<String>{
+    fun updateProduct(product: Product): MutableLiveData<String> {
+        api.updateProduct(product).enqueue(object : Callback<String>{
             override fun onFailure(call: Call<String>, t: Throwable) {
                 data.value = null
             }
@@ -136,8 +136,8 @@ class ProductRepository(private val api : Api){
         return data
     }
 
-    fun deleteProduct(token:String, product: Product): MutableLiveData<String> {
-        api.deleteProduct(product,"Bearer %s".format(token)).enqueue(object : Callback<String>{
+    fun deleteProduct(product: Product): MutableLiveData<String> {
+        api.deleteProduct(product).enqueue(object : Callback<String>{
             override fun onFailure(call: Call<String>, t: Throwable) {
                 data.value = null
             }

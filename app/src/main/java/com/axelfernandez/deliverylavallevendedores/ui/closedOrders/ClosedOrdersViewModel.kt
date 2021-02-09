@@ -15,11 +15,13 @@ import com.axelfernandez.deliverylavallevendedores.repository.OrderRepository
 
 class ClosedOrdersViewModel : ViewModel() {
 
-    private val orderRepository = OrderRepository(RetrofitFactory.buildService(Api::class.java))
+    private lateinit var orderRepository :OrderRepository
 
-
-    fun solicitClosedOrders(token: String){
-        orderRepository.solicitOrderClosed(token)
+    fun getRepository(context: Context) {
+        orderRepository = OrderRepository(RetrofitFactory.buildService(Api::class.java, context))
+    }
+    fun solicitClosedOrders(){
+        orderRepository.solicitOrderClosed()
     }
     fun returnClosedPending(): LiveData<List<Order>> {
         return orderRepository.returnOrdersClosed()

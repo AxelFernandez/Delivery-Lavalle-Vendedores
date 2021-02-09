@@ -36,16 +36,16 @@ class ReviewsFragment : Fragment() {
 	override fun onActivityCreated(savedInstanceState: Bundle?) {
 		super.onActivityCreated(savedInstanceState)
 		viewModel = ViewModelProvider(this).get(ReviewsViewModel::class.java)
+		viewModel.getRepository(requireContext())
 		val arguments = arguments?:return
 		val v = view?:return
 		val company = LoginUtils.getDefaultCompany(requireContext())
 		val toolbar = v.findViewById(R.id.toolbar) as Toolbar
-		val user = LoginUtils.getUserFromSharedPreferences(requireContext())
 		val reviews = v.findViewById(R.id.reviews_rv) as RecyclerView
 		toolbar.setNavigationIcon(R.drawable.ic_back_button)
 		toolbar.setNavigationOnClickListener(View.OnClickListener { requireActivity().onBackPressed() })
 		viewModel.bind(v,company)
-		viewModel.getReviews(user.token, company.id?:return)
+		viewModel.getReviews(company.id?:return)
 		viewModel.returnReviews().observe(viewLifecycleOwner, Observer {
 			if (it == null){
 				v.no_review_layout.isVisible = true

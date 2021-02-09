@@ -33,11 +33,11 @@ class ProfileFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        viewModel.getRepository(requireContext())
         val view = view?:return
-        val user = LoginUtils.getUserFromSharedPreferences(requireContext())
-        viewModel.getCompanyData(user.token)
-        viewModel.getAccountDebit(user.token)
-        viewModel.fetchPendingInvoices(user.token)
+        viewModel.getCompanyData()
+        viewModel.getAccountDebit()
+        viewModel.fetchPendingInvoices()
         viewModel.returnData().observe(viewLifecycleOwner, Observer {
             viewModel.bind(it,requireContext(),view)
             LoginUtils.saveDefaultCompany(requireContext(),it)

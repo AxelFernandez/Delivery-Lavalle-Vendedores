@@ -40,8 +40,8 @@ class LoginRepository (
 
     val tokenLiveData = MutableLiveData<ConfirmationObject>()
 
-    fun sendToken(token: String, firebaseToken:FirebaseToken): MutableLiveData<ConfirmationObject> {
-        api.sendFirebaseToken(firebaseToken, "Bearer %s".format(token)).enqueue(object : Callback<ConfirmationObject> {
+    fun sendToken(firebaseToken:FirebaseToken): MutableLiveData<ConfirmationObject> {
+        api.sendFirebaseToken(firebaseToken).enqueue(object : Callback<ConfirmationObject> {
             override fun onFailure(call: Call<ConfirmationObject>, t: Throwable) {
                 tokenLiveData.value = null
 

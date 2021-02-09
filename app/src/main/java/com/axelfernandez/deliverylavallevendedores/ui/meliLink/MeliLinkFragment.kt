@@ -33,14 +33,14 @@ class MeliLinkFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val view = view?:return
+        viewModel = ViewModelProvider(this).get(MeliLinkViewModel::class.java)
+        viewModel.getRepository(requireContext())
         val toolbar = view.findViewById(R.id.toolbar) as Toolbar
         toolbar.setNavigationIcon(R.drawable.ic_back_button)
         toolbar.setNavigationOnClickListener(View.OnClickListener { requireActivity().onBackPressed() })
-        viewModel = ViewModelProvider(this).get(MeliLinkViewModel::class.java)
         val arguments = arguments ?: return
         val orderId = MeliLinkFragmentArgs.fromBundle(arguments).orderId
-        val user = LoginUtils.getUserFromSharedPreferences(requireContext())
-        viewModel.fetchMeliLink(orderId, user.token)
+        viewModel.fetchMeliLink(orderId)
         viewModel.returnExistedMeliLink().observe(viewLifecycleOwner, Observer {
             val isAvailable = it.isAvailable ?: return@Observer
             if (isAvailable) {
@@ -51,7 +51,7 @@ class MeliLinkFragment : Fragment() {
         view.send_meli_link_button.setOnClickListener {
             val link :String = view.add_meli_link_label.text.toString()
             val meliLink = MeliLink(null,orderId,link)
-            viewModel.sendMeliLink(meliLink,user.token)
+            viewModel.sendMeliLink(meliLink)
         }
 
         viewModel.returnConfirmation().observe(viewLifecycleOwner, Observer {

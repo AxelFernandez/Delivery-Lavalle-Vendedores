@@ -22,7 +22,7 @@ class CompanyRepository (
     val pendingInvoices = MutableLiveData<Boolean>()
     val availability = MutableLiveData<Boolean>()
 
-    fun registerCompany(token: String,
+    fun registerCompany(
                         file : MultipartBody.Part,
                         name : MultipartBody.Part,
                         description : MultipartBody.Part,
@@ -35,7 +35,7 @@ class CompanyRepository (
                         availableNow : MultipartBody.Part
 
     ): MutableLiveData<String> {
-        api.registryCompany("Bearer %s".format(token),file,name,description,phone,address,paymentMethod,deliveryMethod,category,limits,availableNow).enqueue(object :Callback<String>{
+        api.registryCompany(file,name,description,phone,address,paymentMethod,deliveryMethod,category,limits,availableNow).enqueue(object :Callback<String>{
 
             override fun onFailure(call: Call<String>, t: Throwable) {
                 data.value= null
@@ -53,8 +53,8 @@ class CompanyRepository (
         return data
     }
 
-    fun getCompanyData(token: String): MutableLiveData<Company> {
-        api.getCompany("Bearer %s".format(token)).enqueue(object :
+    fun getCompanyFullData(): MutableLiveData<Company> {
+        api.getCompany().enqueue(object :
             Callback<Company> {
             override fun onFailure(call: Call<Company>, t: Throwable) {
                 companyData.value = null
@@ -71,8 +71,8 @@ class CompanyRepository (
         return companyData
     }
 
-    fun registerCompanyNoImage(token: String, company: Company): MutableLiveData<String> {
-        api.registryCompanyNoImage("Bearer %s".format(token),company).enqueue(object :Callback<String>{
+    fun registerCompanyNoImage(company: Company): MutableLiveData<String> {
+        api.registryCompanyNoImage(company).enqueue(object :Callback<String>{
 
             override fun onFailure(call: Call<String>, t: Throwable) {
                 data.value= null
@@ -86,8 +86,8 @@ class CompanyRepository (
         return data
     }
 
-    fun getAccountDebit(token: String): MutableLiveData<String> {
-        api.getAccountDebit("Bearer %s".format(token)).enqueue(object :Callback<String>{
+    fun getAccountDebit(): MutableLiveData<String> {
+        api.getAccountDebit().enqueue(object :Callback<String>{
 
             override fun onFailure(call: Call<String>, t: Throwable) {
                 dataAccountDebit.value= null
@@ -105,8 +105,8 @@ class CompanyRepository (
     }
 
 
-    fun getInvoices(token: String): MutableLiveData<List<Invoice>> {
-        api.getInvoices("Bearer %s".format(token)).enqueue(object :Callback<List<Invoice>>{
+    fun getInvoice(): MutableLiveData<List<Invoice>> {
+        api.getInvoices().enqueue(object :Callback<List<Invoice>>{
 
             override fun onFailure(call: Call<List<Invoice>>, t: Throwable) {
                 invoices.value= null
@@ -124,8 +124,8 @@ class CompanyRepository (
     }
 
 
-    fun hadPendingInvoices(token: String): MutableLiveData<Boolean> {
-        api.hadPendingInvoices("Bearer %s".format(token)).enqueue(object :Callback<Boolean>{
+    fun hadPendingInvoices(): MutableLiveData<Boolean> {
+        api.hadPendingInvoices().enqueue(object :Callback<Boolean>{
 
             override fun onFailure(call: Call<Boolean>, t: Throwable) {
                 pendingInvoices.value= null
@@ -143,8 +143,8 @@ class CompanyRepository (
     }
 
 
-    fun getCompanyAvailability(token : String): MutableLiveData<Boolean>{
-        api.getCompanyAvailability("Bearer %s".format(token)).enqueue(object : Callback<Boolean>{
+    fun getCompanyAvailability(): MutableLiveData<Boolean>{
+        api.getCompanyAvailability().enqueue(object : Callback<Boolean>{
             override fun onFailure(call: Call<Boolean>, t: Throwable) {
                 availability.value = null
             }
@@ -156,8 +156,8 @@ class CompanyRepository (
         return availability
     }
 
-    fun postCompanyAvailability(token : String, available :Boolean): MutableLiveData<Boolean>{
-        api.postCompanyAvailability("Bearer %s".format(token), available).enqueue(object : Callback<Boolean>{
+    fun postCompanyAvailability(available :Boolean): MutableLiveData<Boolean>{
+        api.postCompanyAvailability(available).enqueue(object : Callback<Boolean>{
             override fun onFailure(call: Call<Boolean>, t: Throwable) {
                 availability.value = null
             }

@@ -14,8 +14,8 @@ class OrderRepository(
     private val api: Api
 ) {
     val dataPending = MutableLiveData<List<Order>>()
-    fun solicitOrderPending(token: String): MutableLiveData<List<Order>> {
-        api.getOrdersPending("Bearer %s".format(token)).enqueue(object :
+    fun solicitOrderPending(): MutableLiveData<List<Order>> {
+        api.getOrdersPending().enqueue(object :
             Callback<List<Order>> {
             override fun onFailure(call: Call<List<Order>>, t: Throwable) {
                 dataPending.value = null
@@ -34,8 +34,8 @@ class OrderRepository(
 
 
     val dataInProgress = MutableLiveData<List<Order>>()
-    fun solicitOrderInProgress(token: String): MutableLiveData<List<Order>> {
-        api.getOrdersInProgress("Bearer %s".format(token)).enqueue(object :
+    fun solicitOrderInProgress(): MutableLiveData<List<Order>> {
+        api.getOrdersInProgress().enqueue(object :
             Callback<List<Order>> {
             override fun onFailure(call: Call<List<Order>>, t: Throwable) {
                 dataInProgress.value = null
@@ -56,8 +56,8 @@ class OrderRepository(
 
 
     val dataClosed = MutableLiveData<List<Order>>()
-    fun solicitOrderClosed(token: String): MutableLiveData<List<Order>> {
-        api.getOrdersClosed("Bearer %s".format(token)).enqueue(object :
+    fun solicitOrderClosed(): MutableLiveData<List<Order>> {
+        api.getOrdersClosed().enqueue(object :
             Callback<List<Order>> {
             override fun onFailure(call: Call<List<Order>>, t: Throwable) {
                 dataInProgress.value = null
@@ -78,8 +78,8 @@ class OrderRepository(
 
 
     val dataOrderById = MutableLiveData<Order>()
-    fun solicitOrderById(orderId: String, token: String): MutableLiveData<Order> {
-        api.getOrderById(orderId, "Bearer %s".format(token)).enqueue(object :
+    fun solicitOrderById(orderId: String): MutableLiveData<Order> {
+        api.getOrderById(orderId).enqueue(object :
             Callback<Order> {
             override fun onFailure(call: Call<Order>, t: Throwable) {
                 dataOrderById.value = null
@@ -98,8 +98,8 @@ class OrderRepository(
 
 
     val dataOrderToNewState = MutableLiveData<Order>()
-    fun solicitSetNewState(orderId: String, token: String): MutableLiveData<Order> {
-        api.setOrderInNextState(orderId, "Bearer %s".format(token)).enqueue(object :
+    fun solicitSetNewState(orderId: String): MutableLiveData<Order> {
+        api.setOrderInNextState(orderId).enqueue(object :
             Callback<Order> {
             override fun onFailure(call: Call<Order>, t: Throwable) {
                 dataOrderToNewState.value = null
@@ -112,8 +112,8 @@ class OrderRepository(
         return dataOrderToNewState
     }
 
-    fun cancelOrder(orderId: String, token: String): MutableLiveData<Order> {
-        api.cancelOrder(orderId, "Bearer %s".format(token)).enqueue(object :
+    fun cancelOrder(orderId: String): MutableLiveData<Order> {
+        api.cancelOrder(orderId).enqueue(object :
             Callback<Order> {
             override fun onFailure(call: Call<Order>, t: Throwable) {
                 dataOrderToNewState.value = null
@@ -131,8 +131,8 @@ class OrderRepository(
     }
 
     val reviews = MutableLiveData<List<Review>>()
-    fun getReviews(token: String, companyId: String): MutableLiveData<List<Review>> {
-        api.getReviews("Bearer %s".format(token), companyId)
+    fun getReviews(companyId: String): MutableLiveData<List<Review>> {
+        api.getReviews(companyId)
             .enqueue(object : Callback<List<Review>> {
                 override fun onFailure(call: Call<List<Review>>, t: Throwable) {
                     reviews.value = null
@@ -158,8 +158,8 @@ class OrderRepository(
         return meliLink
     }
 
-    fun getMeliLinkByOrderId(orderId: String, token: String): MutableLiveData<MeliLink> {
-        api.getMeLiLink("Bearer %s".format(token), orderId).enqueue(object : Callback<MeliLink> {
+    fun getMeliLinkByOrderId(orderId: String): MutableLiveData<MeliLink> {
+        api.getMeLiLink(orderId).enqueue(object : Callback<MeliLink> {
             override fun onFailure(call: Call<MeliLink>, t: Throwable) {
                 meliLink.value = null
             }
@@ -173,8 +173,8 @@ class OrderRepository(
     }
 
     val meliLinkId = MutableLiveData<String>()
-    fun sendMeliLink(token: String, link: MeliLink): MutableLiveData<String> {
-        api.sendMeLiLink("Bearer %s".format(token), link).enqueue(object : Callback<String> {
+    fun sendMeliLink(link: MeliLink): MutableLiveData<String> {
+        api.sendMeLiLink(link).enqueue(object : Callback<String> {
             override fun onFailure(call: Call<String>, t: Throwable) {
                 meliLinkId.value = null
             }

@@ -12,34 +12,36 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.profile_fragment.view.*
 
 class ProfileViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
 
-    private val companyRepository = CompanyRepository(RetrofitFactory.buildService(Api::class.java))
+    private lateinit var companyRepository : CompanyRepository
 
+    fun getRepository(context: Context) {
+        companyRepository = CompanyRepository(RetrofitFactory.buildService(Api::class.java, context))
+    }
     fun bind(company : Company, context: Context, view : View){
         view.settings_name.text = company.name
         view.settings_address.text = company.address
         Picasso.with(context).load(company.photo).into(view.settings_image)
     }
 
-    fun getCompanyData(token:String){
-        companyRepository.getCompanyData(token)
+    fun getCompanyData(){
+        companyRepository.getCompanyFullData()
     }
 
     fun returnData(): LiveData<Company> {
         return companyRepository.returnCompany()
     }
 
-    fun getAccountDebit(token:String){
-        companyRepository.getAccountDebit(token)
+    fun getAccountDebit(){
+        companyRepository.getAccountDebit()
     }
 
     fun returnAccountDebit(): LiveData<String> {
         return companyRepository.returnCompanyAccountDebit()
     }
 
-    fun fetchPendingInvoices(token: String){
-        companyRepository.hadPendingInvoices(token)
+    fun fetchPendingInvoices(){
+        companyRepository.hadPendingInvoices()
     }
     fun returnFetchPendingInvoices(): LiveData<Boolean> {
         return companyRepository.returnHadPendingInvoices()

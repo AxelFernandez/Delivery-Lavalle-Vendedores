@@ -37,10 +37,10 @@ class CategoryFragment : Fragment() {
     ): View? {
         categoryViewModel =
             ViewModelProviders.of(this).get(CategoryViewModel::class.java)
+        categoryViewModel.getRepository(requireContext())
         val root = inflater.inflate(R.layout.fragment_category, container, false)
-        user =  LoginUtils.getUserFromSharedPreferences(requireContext())
         categoryRv = root.findViewById(R.id.category_rv) as RecyclerView
-        categoryViewModel.solicitCategory(user.token)
+        categoryViewModel.solicitCategory()
         categoryViewModel.returnCategory().observe(viewLifecycleOwner, Observer {
             if (it == null){
                 root.category_empty?.isVisible = true
@@ -58,7 +58,7 @@ class CategoryFragment : Fragment() {
         categoryViewModel.returnResponseDeleted().observe(viewLifecycleOwner, Observer {
             if (atomicBoolean.compareAndSet(true,false)){
                 ViewUtil.setSnackBar(root,R.color.orange,it)
-                categoryViewModel.solicitCategory(user.token)
+                categoryViewModel.solicitCategory()
             }
 
         })
@@ -70,6 +70,6 @@ class CategoryFragment : Fragment() {
     }
     private fun onDeleteSelected(productCategory: ProductCategory){
         atomicBoolean.set(true)
-        categoryViewModel.deleteCategory(user.token, ProductCategoryRequest(TypeOfView.DELETE.value, productCategory.description))
+        categoryViewModel.deleteCategory(ProductCategoryRequest(TypeOfView.DELETE.value, productCategory.description))
     }
 }

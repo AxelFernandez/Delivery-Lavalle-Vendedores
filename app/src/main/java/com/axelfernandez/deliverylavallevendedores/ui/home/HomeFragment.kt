@@ -32,13 +32,13 @@ class HomeFragment : Fragment() {
     ): View? {
         homeViewModel =
             ViewModelProviders.of(this).get(HomeViewModel::class.java)
+        homeViewModel.getRepository(requireContext())
         val root = inflater.inflate(R.layout.fragment_home, container, false)
         pendingRv = root.findViewById(R.id.rv_pending) as RecyclerView
         progressrv = root.findViewById(R.id.rv_in_process) as RecyclerView
-        val user = LoginUtils.getUserFromSharedPreferences(requireContext())
-        homeViewModel.solicitPendingOrders(user.token)
-        homeViewModel.solicitInProgressOrders(user.token)
-        homeViewModel.getAvailability(user.token)
+        homeViewModel.solicitPendingOrders()
+        homeViewModel.solicitInProgressOrders()
+        homeViewModel.getAvailability()
 
 
         homeViewModel.returnAvailability().observe(viewLifecycleOwner, Observer {
@@ -50,7 +50,7 @@ class HomeFragment : Fragment() {
             }
         })
         root.switcher.setOnCheckedChangeListener {
-            homeViewModel.postAvailability(user.token, it)
+            homeViewModel.postAvailability(it)
         }
         homeViewModel.returnPendingOrders().observe(viewLifecycleOwner, Observer {
             if(it == null){
