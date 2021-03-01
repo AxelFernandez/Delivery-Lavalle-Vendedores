@@ -40,12 +40,14 @@ class CompanyRegisterViewModel : ViewModel() {
             result = it
             if(it) {
                 view.name.error = context.getString(R.string.required)
+                return result
             }
         }
         view.description.text.isNullOrEmpty().let {
             result = it
             if(it) {
                 view.description.error = context.getString(R.string.required)
+                return result
             }
         }
 
@@ -53,22 +55,26 @@ class CompanyRegisterViewModel : ViewModel() {
             result = it
             if(it) {
                 view.address.error = context.getString(R.string.required)
+                return result
             }
         }
         view.phone.text.isNullOrEmpty().let {
             result = it
             if(it) {
                 view.phone.error = context.getString(R.string.required)
+                return result
             }
         }
 
         if( !view.payment_method_cash.isChecked && !view.payment_method_MercadoPago.isChecked){
             result = true
             ViewUtil.setSnackBar(view, R.color.orange,"Debes Seleccionar un metodo de pago")
+            return result
         }
         if( !view.delivery_method_delivery.isChecked && !view.delivery_method_in_local.isChecked){
             result = true
             ViewUtil.setSnackBar(view, R.color.orange,"Debes Seleccionar un metodo de entrega")
+            return result
         }
         return result
     }

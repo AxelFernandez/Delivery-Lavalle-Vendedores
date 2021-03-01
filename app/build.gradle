@@ -21,15 +21,15 @@ android {
         applicationId "com.axelfernandez.deliverylavallevendedores"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 3
-        versionName "1.2"
+        versionCode 4
+        versionName "1.3"
         buildConfigField "String", "hostname", '"https://deliverylavalle.com.ar"'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     compileOptions {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
         jvmTarget = "1.8"
@@ -39,12 +39,23 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField "String", "hostname", '"https://deliverylavalle.com.ar"'
+            buildConfigField "String", "enviroment", '"Production"'
+            buildConfigField "String", "tokenGoogleClient", '"53044701658-a7r3evgf1basgjbpu0cp9ifl9uugeu7j.apps.googleusercontent.com"'
             signingConfig signingConfigs.release
 
         }
         local{
             initWith debug
-            buildConfigField "String", "hostname", '"http://192.168.0.16:8080"'
+            buildConfigField "String", "hostname", '"http://192.168.0.13:8080"'
+            buildConfigField "String", "tokenGoogleClient", '"53044701658-a7r3evgf1basgjbpu0cp9ifl9uugeu7j.apps.googleusercontent.com"'
+            buildConfigField "String", "enviroment", '"Local"'
+
+        }
+        QA{
+            initWith debug
+            buildConfigField "String", "hostname", '"https://delivery-lavalle.herokuapp.com"'
+            buildConfigField "String", "tokenGoogleClient", '"53044701658-a7r3evgf1basgjbpu0cp9ifl9uugeu7j.apps.googleusercontent.com"'
+            buildConfigField "String", "enviroment", '"QA"'
         }
     }
 }

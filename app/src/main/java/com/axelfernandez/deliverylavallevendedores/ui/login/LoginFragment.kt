@@ -13,8 +13,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment.findNavController
+import com.axelfernandez.deliverylavallevendedores.BuildConfig
 import com.axelfernandez.deliverylavallevendedores.HomeActivity
 import com.axelfernandez.deliverylavallevendedores.R
 import com.axelfernandez.deliverylavallevendedores.models.FirebaseToken
@@ -29,6 +31,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.android.synthetic.main.login_fragment.view.*
 import retrofit2.Call
@@ -52,7 +55,7 @@ class LoginFragment : Fragment() {
     ): View? {
         val v =  inflater.inflate(R.layout.login_fragment, container, false)
         mGoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.token_client_id))
+            .requestIdToken(BuildConfig.tokenGoogleClient)
             .requestProfile()
             .requestEmail()
             .build()
@@ -62,6 +65,9 @@ class LoginFragment : Fragment() {
             signIn()
         }
         v.terms_and_conditions.movementMethod = LinkMovementMethod.getInstance();
+        val navView: BottomNavigationView? = v.findViewById(R.id.nav_view)
+        navView?.isVisible = false
+
         return v
     }
 
@@ -126,10 +132,7 @@ class LoginFragment : Fragment() {
                     return@OnCompleteListener
                 }
                 val token = task.result
-                val editor =
-                    activity?.getSharedPreferences("userSession", Context.MODE_PRIVATE)
-                        ?.edit() ?: return@OnCompleteListener
-                editor.putString("token_firebase", token).apply()
+                LoginUtils.saveTokenFirebase(token,requireContext())
                 viewModel.sendFirebaseToken(FirebaseToken(token))
             })
     }

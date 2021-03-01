@@ -52,7 +52,19 @@ class LoginRepository (
         })
         return tokenLiveData
     }
+    fun deleteToken(firebaseToken:FirebaseToken): MutableLiveData<ConfirmationObject> {
+        api.deleteFirebaseToken(firebaseToken).enqueue(object : Callback<ConfirmationObject> {
+            override fun onFailure(call: Call<ConfirmationObject>, t: Throwable) {
+                tokenLiveData.value = null
 
+            }
+            override fun onResponse(call: Call<ConfirmationObject>, response: Response<ConfirmationObject>) {
+                tokenLiveData.value = response.body()
+
+            }
+        })
+        return tokenLiveData
+    }
     fun returnFirebaseResponse(): LiveData<ConfirmationObject>{
         return tokenLiveData
     }

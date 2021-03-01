@@ -92,11 +92,8 @@
             app:popExitAnim="@anim/slide_out_right"
             app:destination="@id/invoiceFragment" />
         <action
-            android:id="@+id/action_navigation_profile_to_loginFragment2"
-            app:destination="@id/loginFragment2"
-            app:launchSingleTop="true"
-            app:popUpTo="@id/mobile_navigation"
-            app:popUpToInclusive="true" />
+            android:id="@+id/action_navigation_to_nav_grap"
+            app:destination="@id/nav_graph.xml" />
     </fragment>
     <fragment
         android:id="@+id/orderDetail"
@@ -149,21 +146,15 @@
         android:label="add_category_fragment"
         tools:layout="@layout/add_category_fragment" >
         <argument
-            android:name="description"
-            app:argType="string"
+            android:name="productCategory"
+            app:argType="com.axelfernandez.deliverylavallevendedores.models.ProductCategory"
             app:nullable="true" />
-        <argument
-            android:name="Type"
-            app:argType="com.axelfernandez.deliverylavallevendedores.utils.TypeOfView" />
     </fragment>
     <fragment
         android:id="@+id/addProduct"
         android:name="com.axelfernandez.deliverylavallevendedores.ui.addProduct.AddProduct"
         android:label="add_product_fragment"
         tools:layout="@layout/add_product_fragment" >
-        <argument
-            android:name="type"
-            app:argType="com.axelfernandez.deliverylavallevendedores.utils.TypeOfView" />
         <argument
             android:name="product"
             app:argType="com.axelfernandez.deliverylavallevendedores.models.Product"
@@ -234,9 +225,6 @@
             android:name="invoice"
             app:argType="com.axelfernandez.deliverylavallevendedores.models.Invoice" />
     </fragment>
-    <fragment
-        android:id="@+id/loginFragment2"
-        android:name="com.axelfernandez.deliverylavallevendedores.ui.login.LoginFragment"
-        android:label="LoginFragment" />
+    <include app:graph="@navigation/nav_graph" />
 
 </navigation>

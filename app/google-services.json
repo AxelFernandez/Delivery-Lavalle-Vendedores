@@ -71,6 +71,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "53044701658-500vaa9uiigkuammkdqi4lpv4c99n6qk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.axelfernandez.deliverylavallevendedores",
+            "certificate_hash": "5c9ec9538a52187bb462ad29173ece859729aec9"
+          }
+        },
+        {
           "client_id": "53044701658-bd5k4ljsi86jfivr39pcc1o0hi9e8mcr.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

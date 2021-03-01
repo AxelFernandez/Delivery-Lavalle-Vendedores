@@ -99,6 +99,15 @@ class LoginUtils {
             return sharedPreferences.getBoolean(context.getString(R.string.is_login_ready),false)
 
         }
+        fun saveTokenFirebase(token: String, context: Context){
+            val editor :SharedPreferences.Editor = context.getSharedPreferences("userSession", Context.MODE_PRIVATE).edit()
+            editor.putString("token_firebase", token).apply()
+        }
+
+        fun getTokenFirebase(context: Context): String? {
+            val editor :SharedPreferences = context.getSharedPreferences("userSession", Context.MODE_PRIVATE)
+            return editor.getString("token_firebase", null)
+        }
     }
 }
 

@@ -16,6 +16,9 @@ interface Api {
     @POST("firebase_token")
     fun sendFirebaseToken(@Body firebaseToken: FirebaseToken):Call<ConfirmationObject>
 
+    @PUT("firebase_token")
+    fun deleteFirebaseToken(@Body firebaseToken: FirebaseToken):Call<ConfirmationObject>
+
     @GET("company_category")
     fun getCompanyCategories():Call<List<CompanyCategoryResponse>>
 
@@ -23,7 +26,7 @@ interface Api {
     fun getProductCategory():Call<List<ProductCategory>>
 
     @POST("product_category")
-    fun postProductCategory(@Body categoryRequest: ProductCategoryRequest):Call<List<ProductCategory>>
+    fun postProductCategory(@Body categoryRequest: ProductCategory):Call<List<ProductCategory>>
 
     @GET("product")
     fun getProducts():Call<List<Product>>
@@ -109,7 +112,17 @@ interface Api {
                         @Part price : MultipartBody.Part,
                         @Part category : MultipartBody.Part,
                         @Part availableNow : MultipartBody.Part,
-                        @Part typeOfView : MultipartBody.Part,
-                        @Part id : MultipartBody.Part
     ): Call<String>
+
+        @Multipart
+        @POST("product")
+        fun updateProductWithImage(
+            @Part file: MultipartBody.Part,
+            @Part name : MultipartBody.Part,
+            @Part description : MultipartBody.Part,
+            @Part price : MultipartBody.Part,
+            @Part category : MultipartBody.Part,
+            @Part availableNow : MultipartBody.Part,
+            @Part id : MultipartBody.Part
+        ): Call<String>
 }

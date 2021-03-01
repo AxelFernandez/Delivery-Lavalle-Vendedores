@@ -13,4 +13,4 @@
 .externalNativeBuild
 .cxx
 /app/release
-/app/live
+/app/QA

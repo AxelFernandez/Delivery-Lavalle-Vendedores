@@ -16,7 +16,6 @@ import com.axelfernandez.deliverylavallevendedores.adapter.ProductCategoryAdapte
 import com.axelfernandez.deliverylavallevendedores.models.ProductCategory
 import com.axelfernandez.deliverylavallevendedores.models.ProductCategoryRequest
 import com.axelfernandez.deliverylavallevendedores.models.User
-import com.axelfernandez.deliverylavallevendedores.utils.LoginUtils
 import com.axelfernandez.deliverylavallevendedores.utils.TypeOfView
 import com.axelfernandez.deliverylavallevendedores.utils.ViewUtil
 import kotlinx.android.synthetic.main.fragment_category.view.*
@@ -43,17 +42,20 @@ class CategoryFragment : Fragment() {
         categoryViewModel.solicitCategory()
         categoryViewModel.returnCategory().observe(viewLifecycleOwner, Observer {
             if (it == null){
-                root.category_empty?.isVisible = true
+                ViewUtil.setSnackBar(root,R.color.orange,getString(R.string.server_error))
                 return@Observer
+            }
+            if (it.isEmpty()){
+                root.category_empty.isVisible = true
             }
             categoryRv.layoutManager = LinearLayoutManager(requireContext(),
                 LinearLayoutManager.VERTICAL,false)
             val orderAdapter = ProductCategoryAdapter(it, {onEditSelected(it)}, {onDeleteSelected(it)})
             categoryRv.adapter = orderAdapter
-
+            root.progress_bar_category.isVisible = false
         })
         root.category_add.setOnClickListener {
-            findNavController(this).navigate(CategoryFragmentDirections.actionNavigationCategoryToAddCategory(null, TypeOfView.ADD))
+            findNavController(this).navigate(CategoryFragmentDirections.actionNavigationCategoryToAddCategory(null))
         }
         categoryViewModel.returnResponseDeleted().observe(viewLifecycleOwner, Observer {
             if (atomicBoolean.compareAndSet(true,false)){
@@ -65,11 +67,11 @@ class CategoryFragment : Fragment() {
         return root
     }
     private fun onEditSelected(productCategory: ProductCategory){
-        findNavController(this).navigate(CategoryFragmentDirections.actionNavigationCategoryToAddCategory(productCategory.description, TypeOfView.EDIT))
+        findNavController(this).navigate(CategoryFragmentDirections.actionNavigationCategoryToAddCategory(productCategory))
 
     }
     private fun onDeleteSelected(productCategory: ProductCategory){
         atomicBoolean.set(true)
-        categoryViewModel.deleteCategory(ProductCategoryRequest(TypeOfView.DELETE.value, productCategory.description))
+        categoryViewModel.deleteCategory(ProductCategoryRequest(TypeOfView.DELETE.value, productCategory.description, id = productCategory.id))
     }
 }

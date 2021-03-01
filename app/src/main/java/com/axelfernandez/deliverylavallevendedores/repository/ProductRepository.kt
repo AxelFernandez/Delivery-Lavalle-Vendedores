@@ -36,7 +36,7 @@ class ProductRepository(private val api : Api){
         return dataCategory
     }
 
-    fun postNewProductCategory(categoryRequest: ProductCategoryRequest): MutableLiveData<List<ProductCategory>>{
+    fun postNewProductCategory(categoryRequest: ProductCategory): MutableLiveData<List<ProductCategory>>{
         api.postProductCategory(categoryRequest).enqueue(object :
             Callback<List<ProductCategory>> {
             override fun onFailure(call: Call<List<ProductCategory>>, t: Throwable) {
@@ -92,19 +92,38 @@ class ProductRepository(private val api : Api){
 
     val data = MutableLiveData<String>()
 
-    fun addProduct(
+    fun updateProductWithImage(
                         file : MultipartBody.Part,
                         name : MultipartBody.Part,
                         description : MultipartBody.Part,
                         price : MultipartBody.Part,
                         category : MultipartBody.Part,
                         availableNow : MultipartBody.Part,
-                        typeOfView:  MultipartBody.Part,
                         id:  MultipartBody.Part
-
-
     ): MutableLiveData<String> {
-        api.addProduct(file,name,description,price, category, availableNow, typeOfView,id).enqueue(object :Callback<String>{
+        api.updateProductWithImage(file,name,description,price, category, availableNow,id).enqueue(object :Callback<String>{
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                data.value= null
+            }
+
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                data.value = response.body()
+            }
+
+        })
+        return data
+    }
+
+    fun addProductWithImage(
+        file : MultipartBody.Part,
+        name : MultipartBody.Part,
+        description : MultipartBody.Part,
+        price : MultipartBody.Part,
+        category : MultipartBody.Part,
+        availableNow : MultipartBody.Part,
+    ): MutableLiveData<String> {
+        api.addProduct(file,name,description,price, category, availableNow).enqueue(object :Callback<String>{
 
             override fun onFailure(call: Call<String>, t: Throwable) {
                 data.value= null

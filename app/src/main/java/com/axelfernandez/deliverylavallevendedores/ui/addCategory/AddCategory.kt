@@ -10,6 +10,7 @@ import android.widget.EditText
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.axelfernandez.deliverylavallevendedores.R
+import com.axelfernandez.deliverylavallevendedores.models.ProductCategory
 import com.axelfernandez.deliverylavallevendedores.models.ProductCategoryRequest
 import com.axelfernandez.deliverylavallevendedores.utils.LoginUtils
 import com.axelfernandez.deliverylavallevendedores.utils.TypeOfView
@@ -37,25 +38,20 @@ class AddCategory : Fragment() {
         val view = view?:return
         val field : EditText = view.findViewById(R.id.add_category_field)
         val arguments = arguments?:return
-        val typeOff = AddCategoryArgs.fromBundle(arguments).Type
-        val description = AddCategoryArgs.fromBundle(arguments).description
-        val categoryRequest = ProductCategoryRequest(typeOff.value)
-        if (typeOff == TypeOfView.EDIT){
-            val descriptionOld = description?:return
-            categoryRequest.descriptionOld = descriptionOld
-            field.setText(descriptionOld)
+        val prodCategory: ProductCategory = AddCategoryArgs.fromBundle(arguments).productCategory?: ProductCategory(description = null)
+        prodCategory.let {
+            field.setText(it.description)
         }
-
-
         viewModel.returnCategory().observe(viewLifecycleOwner, Observer {
             findNavController(this).popBackStack()
         })
         view.save_category.setOnClickListener {
+            it.save_category.isEnabled = false
             if(field.text.isNullOrEmpty()){
                 view.add_title_category.error = getString(R.string.required)
             }else{
-                categoryRequest.description = field.text.toString()
-                viewModel.postNewCategory(categoryRequest)
+                prodCategory.description = field.text.toString()
+                viewModel.postNewCategory(prodCategory)
             }
         }
     }

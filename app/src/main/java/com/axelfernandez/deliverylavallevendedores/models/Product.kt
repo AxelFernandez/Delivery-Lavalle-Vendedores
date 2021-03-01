@@ -17,18 +17,22 @@ data class Product(
 @Parcelize
 class Products: ArrayList<Product>(), Parcelable
 
+@Parcelize
 data class ProductCategoryRequest(
     val type :String,
     var description :String? = null,
-    var descriptionOld : String? = null
-)
+    var descriptionOld : String? = null,
+    var id: String? = null
+): Parcelable
 
+@Parcelize
 data class ProductCategory(
-    val description: String,
-    val quantity: String
-){
+    val id: String? = null,
+    var description: String?,
+    val quantity: String? = null
+): Parcelable{
     override fun toString(): String {
-        return description
+        return description?:""
     }
 }
 

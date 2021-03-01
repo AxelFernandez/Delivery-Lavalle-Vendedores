@@ -16,7 +16,8 @@ import kotlinx.android.synthetic.main.add_product_fragment.view.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import java.io.File
+import java.io.*
+import java.net.URLEncoder
 
 class AddProductViewModel : ViewModel() {
 
@@ -30,18 +31,21 @@ class AddProductViewModel : ViewModel() {
             result = it
             if(it) {
                 view.add_name_product_field.error = context.getString(R.string.required)
+                return it
             }
         }
         view.add_name_description_field.text.isNullOrEmpty().let {
             result = it
             if(it) {
                 view.add_name_description_field.error = context.getString(R.string.required)
+                return it
             }
         }
         view.add_price_product_field.text.isNullOrEmpty().let {
             result = it
             if(it) {
                 view.add_price_product_field.error = context.getString(R.string.required)
+                return it
             }
         }
         return result
@@ -59,32 +63,40 @@ class AddProductViewModel : ViewModel() {
     }
 
 
-    fun addNewProduct(product: Product, file : File, typeOfView: String){
+    fun addNewProduct(product: Product, file : File){
         val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
         val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
-        val name = MultipartBody.Part.createFormData("name", product.name, requestFile)
-        val description = MultipartBody.Part.createFormData("description", product.description, requestFile)
+        val name = MultipartBody.Part.createFormData("name", URLEncoder.encode(product.name,"utf-8"), requestFile)
+        val description = MultipartBody.Part.createFormData("description", URLEncoder.encode(product.description,"utf-8"), requestFile)
         val price = MultipartBody.Part.createFormData("price", product.price, requestFile)
         val availableNow = MultipartBody.Part.createFormData("availableNow", product.availableNow.toString(), requestFile)
         val category = MultipartBody.Part.createFormData("category", product.category, requestFile)
-        val typeOfView = MultipartBody.Part.createFormData("type", typeOfView, requestFile)
         val id = MultipartBody.Part.createFormData("id", product.id, requestFile)
-        productRepository.addProduct(body,name,description,price, category,availableNow,typeOfView,id)
+        if (product.id == null){
+            productRepository.addProductWithImage(body,name,description,price, category,availableNow)
+        }else{
+            productRepository.updateProductWithImage(body,name,description,price, category,availableNow,id)
+        }
     }
 
     fun confirmProductAdded(): LiveData<String> {
         return productRepository.returnConfirmationProductAdded()
     }
 
-    fun buildProduct(view: View):Product{
-        return Product(id=null,
+    fun buildProduct(view: View, product: Product? = null):Product{
+        val productFromView = Product(id=null,
             name= view.add_name_product_field.text.toString(),
             description = view.add_name_description_field.text.toString(),
             availableNow = view.available_now.isChecked,
             price = view.add_price_product_field.text.toString(),
-            category = view.spinner_category_product.selectedItem.toString(),
+            category = (view.spinner_category_product.selectedItem as? ProductCategory)?.id!!,
             photo = null
         )
+        return if(product != null){
+            productFromView.copy(id = product.id)
+        }else{
+            productFromView
+        }
     }
 
     fun editBind(view: View, product: Product,context: Context){

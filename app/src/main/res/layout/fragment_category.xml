@@ -55,4 +55,9 @@
         android:src="@drawable/ic_baseline_add_24"
         android:layout_margin="20dp"
         android:layout_gravity="bottom|right"/>
+    <ProgressBar
+        android:id="@+id/progress_bar_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
 </FrameLayout>

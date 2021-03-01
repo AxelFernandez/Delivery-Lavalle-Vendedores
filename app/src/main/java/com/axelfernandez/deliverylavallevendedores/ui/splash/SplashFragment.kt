@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment.findNavController
+import com.axelfernandez.deliverylavallevendedores.BuildConfig
 import com.axelfernandez.deliverylavallevendedores.HomeActivity
 import com.axelfernandez.deliverylavallevendedores.R
 import com.axelfernandez.deliverylavallevendedores.api.Api
@@ -21,9 +22,11 @@ import com.axelfernandez.deliverylavallevendedores.utils.LoginUtils
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
+import java.lang.Exception
 
 class SplashFragment : Fragment() {
 
@@ -38,6 +41,7 @@ class SplashFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        FirebaseCrashlytics.getInstance().setCustomKey("environment", BuildConfig.BUILD_TYPE)
         return inflater.inflate(R.layout.splash_fragment, container, false)
     }
 
@@ -54,25 +58,26 @@ class SplashFragment : Fragment() {
         remoteConfig.fetchAndActivate()
             .addOnCompleteListener { task ->
                 if (isLoginReady) {
-                    val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestIdToken(getString(R.string.token_client_id))
-                        .requestEmail()
-                        .requestProfile()
-                        .build()
-                    val googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
-                    googleSignInClient.silentSignIn().addOnCompleteListener {
-                        val account: GoogleSignInAccount? = it.result
-                        viewModel.loginGoogle(account?:return@addOnCompleteListener)
-                    }.addOnFailureListener {
-                        findNavController(this).navigate(SplashFragmentDirections.actionSplashFragmentToLoginFragment())
+                    val googleSignInAccount = GoogleSignIn.getLastSignedInAccount(requireContext())
+                    if (googleSignInAccount?.idToken != null) {
+                        viewModel.loginGoogle(googleSignInAccount)
+                    }else{
+                        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                            .requestIdToken(BuildConfig.tokenGoogleClient)
+                            .requestEmail()
+                            .requestProfile()
+                            .build()
+                        val googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
+                        googleSignInClient.silentSignIn().addOnCompleteListener {
+                            val account: GoogleSignInAccount? = it.result
+                            viewModel.loginGoogle(account?:return@addOnCompleteListener)
+                        }
                     }
+
                     viewModel.returnData().observe(viewLifecycleOwner, Observer {
                         if (it == null) {
-                            Toast.makeText(
-                                requireContext(),
-                                "No hay conexion a internet, intentalo de nuevo mas tarde",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            findNavController(this).navigate(SplashFragmentDirections.actionSplashFragmentToLoginFragment())
+                            return@Observer
                         }
                         val user: User = LoginUtils.getUserFromSharedPreferences(requireContext())
                         user.token = it.access_token

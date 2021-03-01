@@ -18,7 +18,7 @@ class AddCategoryViewModel : ViewModel() {
             ProductRepository(RetrofitFactory.buildService(Api::class.java, context))
     }
 
-    fun postNewCategory(categoryRequest: ProductCategoryRequest) {
+    fun postNewCategory(categoryRequest: ProductCategory) {
         productRepository.postNewProductCategory(categoryRequest)
     }
 

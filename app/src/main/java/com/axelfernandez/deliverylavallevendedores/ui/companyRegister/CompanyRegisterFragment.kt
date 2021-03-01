@@ -23,8 +23,10 @@ import com.axelfernandez.deliverylavallevendedores.models.Company
 import com.axelfernandez.deliverylavallevendedores.utils.FileUtil
 import com.axelfernandez.deliverylavallevendedores.utils.LoginUtils
 import com.axelfernandez.deliverylavallevendedores.utils.TypeOfView
-import com.axelfernandez.deliverylavallevendedores.utils.ViewUtil
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.company_register_fragment.view.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.io.File
 
 
@@ -130,12 +132,15 @@ class CompanyRegisterFragment : Fragment() {
         if (requestCode == REQUEST_SELECT_IMAGE_IN_ALBUM && resultCode == RESULT_OK) {
             val selectedFilename = data?.data //The uri with the location of the file
             if (selectedFilename != null) {
-                photoSelected = File(FileUtil.getPath(selectedFilename,requireContext())?:return)
-                photoSelected = FileUtil.resizeImage(photoSelected)
-                isPhotoSelected = true
-                view.company_register_add_photo.text = getString(R.string.photo_selected)
-                view.company_image.setImageURI(selectedFilename)
-                view.company_image.isVisible = true
+                val image = Picasso.with(requireContext()).load(selectedFilename).resize(1024,1024)
+                GlobalScope.launch {
+                    photoSelected = FileUtil.resizeImage(File(FileUtil.bitmapToFile(image.get(),requireContext().applicationContext).toString()))
+                    isPhotoSelected = true
+                }.also {
+                    view.company_register_add_photo.text = getString(R.string.photo_selected)
+                    view.company_image.isVisible = true
+                    image.into(view.company_image)
+                }
             }
         }
     }
