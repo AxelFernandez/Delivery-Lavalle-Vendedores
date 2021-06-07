@@ -59,7 +59,7 @@ class SplashFragment : Fragment() {
             .addOnCompleteListener { task ->
                 if (isLoginReady) {
                     val googleSignInAccount = GoogleSignIn.getLastSignedInAccount(requireContext())
-                    if (googleSignInAccount?.idToken != null) {
+                    if (googleSignInAccount?.isExpired != null) {
                         viewModel.loginGoogle(googleSignInAccount)
                     }else{
                         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
